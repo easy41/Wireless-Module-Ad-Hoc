@@ -21,7 +21,7 @@ public class SendMessage {
     private final static String ROAD_CONDITION ="4";
 
     private BluetoothSocket _socket = null;
-    private Context context;
+    Context context;
     String TAG="SendMessage";
 
     Data getData;
@@ -104,7 +104,7 @@ public class SendMessage {
                 }
                 n++;
             }
-            //getAckThread.start();
+            getAckThread.start();
             os.write(bos_new);
 
            // os.close();
@@ -114,16 +114,20 @@ public class SendMessage {
         }
     }
 
-   /* Thread getAckThread = new Thread(){
+    Thread getAckThread = new Thread(){
         public void run(){
             int ackFlag=0;
+            long t2;
+            getData.setAckFlag(ackFlag);
             long t1 = System.currentTimeMillis();
 
             while(ackFlag==0){
-                long t2 = System.currentTimeMillis();
+                t2 = System.currentTimeMillis();
+                //Log.d(TAG,"Ack Thread running...");
                 if(t2-t1 > 5*1000){
                     //waiting for response... /5s
-                    Toast.makeText(context,"Failed to reach to the destination.",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context,"Failed to reach to the destination.",Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,"Failed to reach to the destination.");
                     break;
                 }else{
                     ackFlag=getData.getAckFlag();
@@ -134,7 +138,7 @@ public class SendMessage {
 
         }
 
-    };*/
+    };
 
 
 }
