@@ -126,13 +126,13 @@ public class BTService extends Service {
                         }
                         String s = new String(buffer_new,0,n);
                         smsg+=s;
-                        Toast.makeText(BTService.this,"ReadThread receive: "+smsg,Toast.LENGTH_SHORT).show();
-                        Log.d(TAG,"ReadThread receive: "+smsg);
+                      //  Toast.makeText(BTService.this,"ReadThread receive: "+smsg,Toast.LENGTH_SHORT).show();
+                       // Log.d(TAG,"ReadThread receive: "+smsg);
                         if(is.available()==0)break;
                     }
 
-                    if(smsg.equals("1234"))
-                        text0.setText("123");
+                    /*if(smsg.equals("1234"))
+                        text0.setText("123");*/
                     handler.sendMessage(handler.obtainMessage());
                     //Log.d(TAG,"read thread end.");
                 }catch(IOException e){
@@ -159,6 +159,17 @@ public class BTService extends Service {
                 }
             }
 
+            if(smsg.length()>2){
+                if (smsg.substring((smsg.length()-2),smsg.length()).equals("/>")){
+                    String[] s=smsg.split("/>");
+                    smsg=s[s.length-1];
+                    Log.d(TAG,"Handler receive: "+smsg);
+                    smsg="";
+                }
+            }
+
+
+            //Log.d(TAG,"Handler receive: "+smsg);
             /*if(smsg.charAt(0)=='t'){
                 dis.setText(smsg.substring(1));
 

@@ -58,18 +58,18 @@ public class SendMessage {
         switch (type){
             case ROUTE_DISCOVERY:
                 String source=fromID+"|";
-                sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+source+"|"+message;
+                sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+source+"|"+message+"/>";
                 break;
             case DIALOGUE:
                 route=getData.getRoute();
-                sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message;
+                sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message+"/>";
                 break;
             case RESCUE_INFORMATION:
-                sendingMessage=type+'|'+broadcastCount+'|'+name+'|'+fromID+'|'+message;
+                sendingMessage=type+'|'+broadcastCount+'|'+name+'|'+fromID+'|'+message+"/>";
                 //Broadcasting the message.
                 break;
             case ROAD_CONDITION:
-                sendingMessage=type+'|'+broadcastCount+'|'+name+'|'+fromID+'|'+message;
+                sendingMessage=type+'|'+broadcastCount+'|'+name+'|'+fromID+'|'+message+"/>";
                 //Broadcasting the message.
                 break;
             default:

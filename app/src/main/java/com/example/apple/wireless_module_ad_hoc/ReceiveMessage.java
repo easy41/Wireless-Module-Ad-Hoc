@@ -61,6 +61,7 @@ public class ReceiveMessage {
         switch(type){
             case "1":
 
+
                 break;
             case "2":
 

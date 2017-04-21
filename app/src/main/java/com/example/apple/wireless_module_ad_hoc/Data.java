@@ -59,6 +59,14 @@ public class Data extends Application {
         return routeDest;
     }
 
+    private int ackFlag;
+    public void setAckFlag(int ackFlag){
+        this.ackFlag=ackFlag;
+    }
+    public int getAckFlag(){
+        return ackFlag;
+    }
+
 
 
     /*
