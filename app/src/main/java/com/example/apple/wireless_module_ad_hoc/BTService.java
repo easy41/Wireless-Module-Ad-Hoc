@@ -164,6 +164,8 @@ public class BTService extends Service {
                     String[] s=smsg.split("/>");
                     smsg=s[s.length-1];
                     Log.d(TAG,"Handler receive: "+smsg);
+                    ReceiveMessage receiveMessage=new ReceiveMessage(getApplicationContext());
+                    receiveMessage.receiveMessageHandler(smsg);
                     smsg="";
                 }
             }

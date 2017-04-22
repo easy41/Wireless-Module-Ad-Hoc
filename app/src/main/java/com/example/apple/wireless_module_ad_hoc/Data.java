@@ -44,7 +44,7 @@ public class Data extends Application {
         return groNum;
     }
 
-    //route format: source|...passing nodes...|destination
+    //route format: source/...passing nodes... /destination
     private String route;
     private String routeDest;
     public void setRoute(String route){

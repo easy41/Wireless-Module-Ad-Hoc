@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
         View home=(LinearLayout)findViewById(R.id.LinearLayout_home);
 
         getData=((Data)getApplicationContext());
-        getData.setRoute("123");
-        getData.setFromID("11111");
+        getData.setRoute("0000");
+        getData.setFromID("1111");
         getData.setName("name");
         Log.d(TAG,"Finished setting values.");
 

@@ -19,6 +19,7 @@ public class SendMessage {
     private final static String DIALOGUE ="2";
     private final static String RESCUE_INFORMATION ="3";
     private final static String ROAD_CONDITION ="4";
+    private final static String Acknowledgement="5";
 
     private BluetoothSocket _socket = null;
     Context context;
@@ -33,17 +34,16 @@ public class SendMessage {
     }
 
 
-    public void sendFormatMessage(String type, String broadcastCount, String toID, String message){
+    public void sendFormatMessage(String type, String broadcastCount, String toID,String route, String message){
         int i;
         int n=0;
         String sendingMessage;
-        String route;
 
 
         getData = ((Data)context);
         String name=getData.getName();
         String fromID=getData.getFromID();
-        Log.d(TAG,"Get data: "+name+"|"+fromID);
+        Log.d(TAG,"Get data: "+name+"/"+fromID);
 
 
 
@@ -57,11 +57,15 @@ public class SendMessage {
 
         switch (type){
             case ROUTE_DISCOVERY:
-                String source=fromID+"|";
-                sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+source+"|"+message+"/>";
+                //String source=fromID+"|";
+                sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message+"/>";
+                break;
+            case Acknowledgement:
+                //route=getData.getRoute();
+                sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+"Ack"+"/>";
                 break;
             case DIALOGUE:
-                route=getData.getRoute();
+                //route=getData.getRoute();
                 sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message+"/>";
                 break;
             case RESCUE_INFORMATION:
@@ -108,7 +112,7 @@ public class SendMessage {
             os.write(bos_new);
 
            // os.close();
-            Log.d(TAG,"send");
+            Log.d(TAG,sendingMessage);
         }catch(IOException e){
             e.getStackTrace();
         }
@@ -124,7 +128,10 @@ public class SendMessage {
             while(ackFlag==0){
                 t2 = System.currentTimeMillis();
                 //Log.d(TAG,"Ack Thread running...");
-                if(t2-t1 > 5*1000){
+                if(t2-t1 > 1000){//1ms
+
+                    //TODO: simulation to calculate the waiting time.
+
                     //waiting for response... /5s
                     //Toast.makeText(context,"Failed to reach to the destination.",Toast.LENGTH_SHORT).show();
                     Log.d(TAG,"Failed to reach to the destination.");

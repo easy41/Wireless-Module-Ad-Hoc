@@ -227,14 +227,23 @@ public class BTClient extends AppCompatActivity {
 
 		SendMessage sendMessage=new SendMessage(getApplicationContext());
 		//Check the stored routing table.
-		//String[] s=getData.getRoute().split("\\|");
-		//String storeDest=s[s.length-1];
-		/*if(getData.getRoute().equals(toID)){
-			sendMessage.sendFormatMessage(DIALOGUE,broadCastCount,toID,message);
-		}else {
-			sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,"Hello!");
-		}*/
-		sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,"Hello!");
+		if(!getData.getRoute().equals("0000")){
+			String[] s=getData.getRoute().split("/");
+			String storeDest=s[s.length-1];
+			if(storeDest.equals(toID)){
+				route=getData.getRoute();
+				sendMessage.sendFormatMessage(DIALOGUE,broadCastCount,toID,route,message);
+			}else {
+				route=getData.getFromID()+"/";
+				sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,route,message);
+			}
+		}
+		else {
+			route=getData.getFromID()+"/";
+			sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,route,message);
+		}
+
+		//sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,route,"Hello!");
 
 
 		//$+groupnum+name+#+latitude+&+longitude+*
