@@ -53,7 +53,7 @@ public class ReceiveMessage {
 
         String[] infoArray=receiveInfo.split("\\|");
         //Check the validity of receiving message.
-        if(infoArray.length==5||infoArray.length==7){
+        if(infoArray.length==6||infoArray.length==7){
             type=infoArray[0];
             try {
                 broadcastCount=infoArray[1];
@@ -75,8 +75,9 @@ public class ReceiveMessage {
                     jsonObject.put("message",infoArray[6]);
                 }
                 else {
-                    message=infoArray[4];
-                    jsonObject.put("message",infoArray[4]);
+                    route=infoArray[4];
+                    message=infoArray[5];
+                   // jsonObject.put("message",infoArray[4]);
                 }
                 getData.setrJson(jsonObject);
 
@@ -225,15 +226,67 @@ public class ReceiveMessage {
                 break;
 
             case RESCUE_INFORMATION:
+                String[] s = route.split("/");
+                int i;
+                int flag=0;
+                //find whether the message has reached this node.
+                for(i=0;i<s.length;i++) {
+                    if (s[i].equals(myID)) {
+                        flag=1;
+                    }
+                }
+                if (flag==0){
 
+                    Log.d(TAG,"The new rescue information is: "+message);
 
+                    //TODO: display the rescue information
+
+                    if (bCount<7){
+                        bCount++;
+                        broadcastCount=Integer.toString(bCount);
+                        toID="0000";
+                        route=route+myID+"/";
+                        sendMessage.sendFormatMessage(RESCUE_INFORMATION,broadcastCount,rName,rFromID,toID,route,message);
+                    }
+
+                }
+                else{
+                    Log.d(TAG,"The message has reached to this node before. Ignore.");
+                }
                 break;
 
             case ROAD_CONDITION:
+                String[] ids = route.split("/");
+                int j;
+                int f=0;
+                //find whether the message has reached this node.
+                for(j=0;j<ids.length;j++) {
+                    if (ids[j].equals(myID)) {
+                        f=1;
+                    }
+                }
+                if (f==0){
 
+                    Log.d(TAG,"The new road condition is: "+message);
+
+                    //TODO: display the road condition
+
+                    if (bCount<7){
+                        bCount++;
+                        broadcastCount=Integer.toString(bCount);
+                        toID="0000";
+                        route=route+myID+"/";
+                        sendMessage.sendFormatMessage(ROAD_CONDITION,broadcastCount,rName,rFromID,toID,route,message);
+                    }
+
+                }
+                else{
+                    Log.d(TAG,"The message has reached to this node before. Ignore.");
+                }
                 break;
 
             default:
+                Log.d(TAG,"The message type is invalid. Ignore.");
                 break;
 
         }

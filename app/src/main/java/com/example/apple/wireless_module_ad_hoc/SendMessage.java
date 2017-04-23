@@ -70,11 +70,11 @@ public class SendMessage {
                 sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message+"/>";
                 break;
             case RESCUE_INFORMATION:
-                sendingMessage=type+'|'+broadcastCount+'|'+name+'|'+fromID+'|'+message+"/>";
+                sendingMessage=type+'|'+broadcastCount+'|'+name+'|'+fromID+'|'+route+"|"+message+"/>";
                 //Broadcasting the message.
                 break;
             case ROAD_CONDITION:
-                sendingMessage=type+'|'+broadcastCount+'|'+name+'|'+fromID+'|'+message+"/>";
+                sendingMessage=type+'|'+broadcastCount+'|'+name+'|'+fromID+'|'+route+'|'+message+"/>";
                 //Broadcasting the message.
                 break;
             default:
