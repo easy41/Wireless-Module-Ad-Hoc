@@ -34,16 +34,17 @@ public class SendMessage {
     }
 
 
-    public void sendFormatMessage(String type, String broadcastCount, String toID,String route, String message){
+    public void sendFormatMessage(String type, String broadcastCount, String name, String fromID, String toID,String route, String message){
         int i;
         int n=0;
         String sendingMessage;
-
-
         getData = ((Data)context);
+
+
+        /*getData = ((Data)context);
         String name=getData.getName();
         String fromID=getData.getFromID();
-        Log.d(TAG,"Get data: "+name+"/"+fromID);
+        Log.d(TAG,"Get data: "+name+"/"+fromID);*/
 
 
 
@@ -81,9 +82,6 @@ public class SendMessage {
                 return;
 
         }
-
-
-
 
         _socket=getData.getSocket();
 

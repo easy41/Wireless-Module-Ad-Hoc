@@ -164,18 +164,16 @@ public class BTService extends Service {
                 if (smsg.substring((smsg.length()-2),smsg.length()).equals("/>")){
                     String[] s=smsg.split("/>");
                     Log.d(TAG,"The length is: "+s.length);
-                    if(s.length==1){
-                        smsg=s[s.length-1];
-                        Log.d(TAG,"Handler receive: "+smsg);
-                        ReceiveMessage receiveMessage=new ReceiveMessage(getApplicationContext());
-                        receiveMessage.receiveMessageHandler(smsg);
-                        smsg="";
-                    }
-                    else {
-                        Log.d(TAG,"Invalid ignore.3");
-                    }
+
+                    smsg=s[s.length-1];
+                    Log.d(TAG,"Handler receive: "+smsg);
+                    ReceiveMessage receiveMessage=new ReceiveMessage(getApplicationContext());
+                    receiveMessage.receiveMessageHandler(smsg);
+                    smsg="";
+
                 }
                 else {
+                    //TODO: invalid handling
                     Log.d(TAG,"Invalid ignore.2");
                 }
             }else {

@@ -49,7 +49,7 @@ public class Data extends Application {
     private String routeDest;
     public void setRoute(String route){
         this.route=route;
-       /* String[] s=route.split("\\|");
+        /*String[] s=route.split("/");
         routeDest=s[s.length-1];*/
     }
     public String getRoute(){

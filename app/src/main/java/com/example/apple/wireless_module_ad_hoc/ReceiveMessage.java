@@ -16,7 +16,7 @@ public class ReceiveMessage {
     private Context context;
     private String type;
     private String broadcastCount;
-    private String name;
+    private String rName;
     private String rFromID;
     private String toID;
     private String route;
@@ -44,6 +44,9 @@ public class ReceiveMessage {
 
     public void receiveMessageHandler(String receiveInfo){
         Log.d(TAG,"Entering receiveMessageHandler.");
+        String name=getData.getName();
+        String fromID=getData.getFromID();
+        Log.d(TAG,"Get data: "+name+"/"+fromID);
 
         SendMessage sendMessage=new SendMessage(context);
         String myID=getData.getFromID();
@@ -55,11 +58,11 @@ public class ReceiveMessage {
             try {
                 broadcastCount=infoArray[1];
                 bCount=Integer.parseInt(broadcastCount);
-                name=infoArray[2];
+                rName =infoArray[2];
                 rFromID=infoArray[3];
                 jsonObject.put("type",infoArray[0]);
                 jsonObject.put("broadcastCount",infoArray[1]);
-                jsonObject.put("name",infoArray[2]);
+                jsonObject.put("rName",infoArray[2]);
                 jsonObject.put("fromID",infoArray[3]);
 
                 //'1' is a char;"1" is a String.
@@ -100,7 +103,7 @@ public class ReceiveMessage {
                     //Send acknowledgement and complete route back to the source.
                     //hypothesis: There is no delay for the Ack.
                     route=route+myID;
-                    sendMessage.sendFormatMessage(Acknowledgement,"0",rFromID,route,"Ack");
+                    sendMessage.sendFormatMessage(Acknowledgement,"0",name,fromID,rFromID,route,"Ack");
                     Log.d(TAG,"Send back ack and show message.");
                     Log.d(TAG,"The received message is: "+message);
 
@@ -112,7 +115,7 @@ public class ReceiveMessage {
                     route=route+myID+"/";
                     bCount++;
                     broadcastCount=Integer.toString(bCount);
-                    sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadcastCount,toID,route,message);
+                    sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadcastCount,rName,rFromID,toID,route,message);
                     Log.d(TAG,"Relay route discovery.");
                 }
                 else{
@@ -124,7 +127,6 @@ public class ReceiveMessage {
                 //toID=myID
                 if(toID.equals(myID)){
                     getData.setRoute(route);
-                    Log.d(TAG,"Store the route to "+rFromID);
                     Log.d(TAG,"The new route is: "+getData.getRoute());
                 }
                 else{
@@ -142,7 +144,7 @@ public class ReceiveMessage {
                             {
                                 bCount++;
                                 broadcastCount=Integer.toString(bCount);
-                                sendMessage.sendFormatMessage(Acknowledgement,broadcastCount,toID,route,message);
+                                sendMessage.sendFormatMessage(Acknowledgement,broadcastCount,rName,rFromID,toID,route,message);
                                 flag=1;
                             }
                             else {
@@ -170,10 +172,60 @@ public class ReceiveMessage {
                 break;
 
             case DIALOGUE:
+                //toID=myID
+                if(toID.equals(myID)){
+
+                    Log.d(TAG,"The new message is: "+message);
+                    sendMessage.sendFormatMessage(Acknowledgement,"0",name,fromID,rFromID,route,"Ack");
+                    Log.d(TAG,"Send back dialogue ack.");
+
+                    //TODO: display the message
+
+                }
+                else{
+                    String[] s=route.split("/");
+                    int i;
+                    int flag=0;
+                    //Search whether myID is in the route. Do relay.
+                    for(i=0;i<s.length;i++){
+                        if(s[i].equals(myID)){
+                            //Avoid transmission loop
+                            int calculate=s.length-1;
+                            calculate=calculate-i;
+                            calculate=calculate-1;
+                            if(bCount==calculate)
+                            {
+                                bCount++;
+                                broadcastCount=Integer.toString(bCount);
+                                sendMessage.sendFormatMessage(DIALOGUE,broadcastCount,rName,rFromID,toID,route,message);
+                                flag=1;
+                            }
+                            else {
+                                flag=2;
+                            }
+                            break;
+                        }
+                    }
+                    switch (flag){
+                        case 0:
+                            Log.d(TAG,"MyID is not in the route. Ignore the dialogue message.");
+                            break;
+                        case 1:
+                            Log.d(TAG,"Relay the dialogue message.");
+                            break;
+                        case 2:
+                            Log.d(TAG,"This dialogue message has been relayed before. Ignore the it.");
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
 
                 break;
 
             case RESCUE_INFORMATION:
+
 
                 break;
 

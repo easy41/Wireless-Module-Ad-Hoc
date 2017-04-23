@@ -225,22 +225,28 @@ public class BTClient extends AppCompatActivity {
 		message=edit0.getText().toString();
 		String route;
 
+		String name=getData.getName();
+		String fromID=getData.getFromID();
+		Log.d(TAG,"Get data: "+name+"/"+fromID);
+
 		SendMessage sendMessage=new SendMessage(getApplicationContext());
+
 		//Check the stored routing table.
 		if(!getData.getRoute().equals("0000")){
 			String[] s=getData.getRoute().split("/");
 			String storeDest=s[s.length-1];
 			if(storeDest.equals(toID)){
 				route=getData.getRoute();
-				sendMessage.sendFormatMessage(DIALOGUE,broadCastCount,toID,route,message);
+				Log.d(TAG,"Get stored route: "+route);
+				sendMessage.sendFormatMessage(DIALOGUE,broadCastCount,name,fromID,toID,route,message);
 			}else {
 				route=getData.getFromID()+"/";
-				sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,route,message);
+				sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,message);
 			}
 		}
 		else {
 			route=getData.getFromID()+"/";
-			sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,route,message);
+			sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,message);
 		}
 
 		//sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,route,"Hello!");
