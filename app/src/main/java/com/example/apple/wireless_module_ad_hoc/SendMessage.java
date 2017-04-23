@@ -57,15 +57,15 @@ public class SendMessage {
 
         switch (type){
             case ROUTE_DISCOVERY:
-                //String source=fromID+"|";
+                //Log.d(TAG,"Start route discovery.");
                 sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message+"/>";
                 break;
             case Acknowledgement:
-                //route=getData.getRoute();
+                //Log.d(TAG,"Start to send Ack.");
                 sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+"Ack"+"/>";
                 break;
             case DIALOGUE:
-                //route=getData.getRoute();
+                //Log.d(TAG,"Start send dialogue.");
                 sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message+"/>";
                 break;
             case RESCUE_INFORMATION:
@@ -108,7 +108,12 @@ public class SendMessage {
                 }
                 n++;
             }
-            getAckThread.start();
+            int bCount=Integer.parseInt(broadcastCount);
+            //It is unnecessary to get ack when relaying the massages.
+            if(bCount==0&&(!type.equals(Acknowledgement))){
+                getAckThread.start();
+            }
+
             os.write(bos_new);
 
            // os.close();
@@ -118,7 +123,7 @@ public class SendMessage {
         }
     }
 
-    Thread getAckThread = new Thread(){
+    private Thread getAckThread = new Thread(){
         public void run(){
             int ackFlag=0;
             long t2;

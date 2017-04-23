@@ -147,7 +147,7 @@ public class BTService extends Service {
 
         public void handleMessage(Message msg){
             super.handleMessage(msg);
-            if(smsg.charAt(0)=='i') {
+            /*if(smsg.charAt(0)=='i') {
                 if ((smsg.charAt(smsg.length() - 1) == '5')
                         && (smsg.charAt(smsg.length() - 2) == '4')
                         && (smsg.charAt(smsg.length() - 3) == '3')
@@ -157,17 +157,29 @@ public class BTService extends Service {
                     bm = string2Bitmap(smsg.substring(0, smsg.length() - 5));
                     iv.setImageBitmap(bm);
                 }
-            }
+            }*/
 
             if(smsg.length()>2){
+                Log.d(TAG,"The length is right.");
                 if (smsg.substring((smsg.length()-2),smsg.length()).equals("/>")){
                     String[] s=smsg.split("/>");
-                    smsg=s[s.length-1];
-                    Log.d(TAG,"Handler receive: "+smsg);
-                    ReceiveMessage receiveMessage=new ReceiveMessage(getApplicationContext());
-                    receiveMessage.receiveMessageHandler(smsg);
-                    smsg="";
+                    Log.d(TAG,"The length is: "+s.length);
+                    if(s.length==1){
+                        smsg=s[s.length-1];
+                        Log.d(TAG,"Handler receive: "+smsg);
+                        ReceiveMessage receiveMessage=new ReceiveMessage(getApplicationContext());
+                        receiveMessage.receiveMessageHandler(smsg);
+                        smsg="";
+                    }
+                    else {
+                        Log.d(TAG,"Invalid ignore.3");
+                    }
                 }
+                else {
+                    Log.d(TAG,"Invalid ignore.2");
+                }
+            }else {
+                Log.d(TAG,"Invalid ignore.1");
             }
 
 

@@ -43,6 +43,10 @@ public class ReceiveMessage {
     }
 
     public void receiveMessageHandler(String receiveInfo){
+        Log.d(TAG,"Entering receiveMessageHandler.");
+
+        SendMessage sendMessage=new SendMessage(context);
+        String myID=getData.getFromID();
 
         String[] infoArray=receiveInfo.split("\\|");
         //Check the validity of receiving message.
@@ -59,7 +63,7 @@ public class ReceiveMessage {
                 jsonObject.put("fromID",infoArray[3]);
 
                 //'1' is a char;"1" is a String.
-                if(type.equals("1")||type.equals("2")){
+                if(type.equals("1")||type.equals("2")||type.equals("5")){
                     toID=infoArray[4];
                     route=infoArray[5];
                     message=infoArray[6];
@@ -80,16 +84,14 @@ public class ReceiveMessage {
             }
         }
         else {
+            //When receive an invalid message format.
             Log.d(TAG,"The new message is invalid. It will be ignored.");
             return;
         }
 
         switch(type){
             case ROUTE_DISCOVERY:
-
-                SendMessage sendMessage=new SendMessage(context);
                 //  myID=destination
-                String myID=getData.getFromID();
                 if(toID.equals(myID)){
                     Log.d(TAG,"I'm the destination.");
 
@@ -119,7 +121,51 @@ public class ReceiveMessage {
                 break;
 
             case Acknowledgement:
+                //toID=myID
+                if(toID.equals(myID)){
+                    getData.setRoute(route);
+                    Log.d(TAG,"Store the route to "+rFromID);
+                    Log.d(TAG,"The new route is: "+getData.getRoute());
+                }
+                else{
+                    String[] s=route.split("/");
+                    int i;
+                    int flag=0;
+                    //Search whether myID is in the route.
+                    for(i=0;i<s.length;i++){
+                        if(s[i].equals(myID)){
+                            //Avoid transmission loop
+                            int calculate=s.length-1;
+                            calculate=calculate-i;
+                            calculate=calculate-1;
+                            if(bCount==calculate)
+                            {
+                                bCount++;
+                                broadcastCount=Integer.toString(bCount);
+                                sendMessage.sendFormatMessage(Acknowledgement,broadcastCount,toID,route,message);
+                                flag=1;
+                            }
+                            else {
+                                flag=2;
+                            }
+                            break;
+                        }
+                    }
+                    switch (flag){
+                        case 0:
+                            Log.d(TAG,"MyID is not in the route. Ignore the message.");
+                            break;
+                        case 1:
+                            Log.d(TAG,"Relay the acknowledgement.");
+                            break;
+                        case 2:
+                            Log.d(TAG,"This ack has been relayed before. Ignore the message.");
+                            break;
+                        default:
+                            break;
+                    }
 
+                }
 
                 break;
 
