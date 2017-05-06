@@ -174,15 +174,15 @@ public class BTService extends Service {
                 }
                 else {
                     //TODO: invalid handling
-                    Log.d(TAG,"Invalid ignore.2");
+                   // Log.d(TAG,"Invalid ignore.2");
                 }
             }else {
-                Log.d(TAG,"Invalid ignore.1");
+               // Log.d(TAG,"Invalid ignore.1");
             }
 
 
             //Log.d(TAG,"Handler receive: "+smsg);
-            /*if(smsg.charAt(0)=='t'){
+            /*if(smsg.charAt(0)=='t'){1
                 dis.setText(smsg.substring(1));
 
 

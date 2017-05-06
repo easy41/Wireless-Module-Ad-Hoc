@@ -1,6 +1,7 @@
 package com.example.apple.wireless_module_ad_hoc;
 
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,12 +10,24 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.content.Intent;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 
 public class LoginActivity extends AppCompatActivity implements OnClickListener {
 
     static String name,groupNum;
-
+    BluetoothSocket _socket = null;
+    Data getData;
+    String TAG="LoginActivity";
+    String toID;
+    String message;
+    String BROADCASTID="00000000";
+    private final static String ROUTE_DISCOVERY ="1";
+    private final static String DIALOGUE ="2";
+    private final static String RESCUE_INFORMATION ="3";
+    private final static String ROAD_CONDITION ="4";
+    private final static String Acknowledgement="5";
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -27,11 +40,15 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         Button location= (Button) findViewById(R.id.location);
         Button chat=(Button) findViewById(R.id.chat);
         Button home=(Button) findViewById(R.id.home);
+        ImageButton helpButton =(ImageButton)findViewById(R.id.help_button_login);
+
+        getData=((Data)getApplicationContext());
 
         location.setOnClickListener(this);
         home.setOnClickListener(this);
         chat.setOnClickListener(this);
         SignInButton.setOnClickListener(this);
+        helpButton.setOnClickListener(this);
 
     }//onCreate end
 
@@ -91,13 +108,54 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                 Intent chatIntent=new Intent(LoginActivity.this,BTClient.class);
                 startActivity(chatIntent);
                 break;
-
+            case R.id.help_button_login:
+                sendHelp();
+                break;
             default:
                 break;
         }
     }
 
 
+    public void sendHelp() {
+
+       /* try{
+            if (_socket == null) {
+                Log.d(TAG, "Socket is null");
+                //Data applicationConstant = ((Data)getApplicationContext());
+                _socket = getData.getSocket();
+            }
+
+        }catch (Exception e){
+            Toast.makeText(LoginActivity.this,"Please connect to the bluetooth module first.",Toast.LENGTH_SHORT).show();
+        }*/
+
+
+        try{
+            String name = getData.getName();
+            String myID = getData.getFromID();
+            Log.d(TAG, "Get data: " + name + "/" + myID);
+            if(name.equals("FFFFFFFF")){
+                Toast.makeText(LoginActivity.this,"Please login first.",Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            //The help message will be broadcast.
+            message = "Help！";//+location
+            String route;
+            String broadcastCount="0";
+
+            SendMessage sendMessage = new SendMessage(getApplicationContext());
+
+            toID = BROADCASTID;
+            route = myID + "/";
+            sendMessage.sendFormatMessage(RESCUE_INFORMATION, broadcastCount, name, myID, toID, route, message);
+
+        }catch (Exception e){
+            Toast.makeText(LoginActivity.this,"Please connect to the bluetooth module first.",Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
 }
 
