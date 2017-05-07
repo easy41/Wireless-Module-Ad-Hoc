@@ -98,7 +98,7 @@ public class BTClient extends AppCompatActivity {
 		toUser=(EditText)findViewById(R.id.to_user);
 
 
-		if (_bluetooth == null){
+		/*if (_bluetooth == null){
 			Toast.makeText(this, "无法打开蓝牙，请确认是否有蓝牙功能", Toast.LENGTH_LONG).show();
 			finish();
 			return;
@@ -112,88 +112,8 @@ public class BTClient extends AppCompatActivity {
 				}
 			}
 		}.start();
-
-
-		/*Button loc= (Button) findViewById(R.id.location);
-		loc.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				String rLatitude="";
-				String rLongitude="";
-				String smsg1=smsg;
-				String rname="";
-				String rgroup="";
-
-				//String smsg1="$2nino#39&116*";
-
-				char a;
-				int i,j,k;
-
-				//Setting the string format to be: $+groupnum+name+#+latitude+&+longitude+*
-
-				char b=smsg1.charAt(0);
-
-				if(b=='$'){
-					rgroup=rgroup+smsg1.charAt(1);
-					for(k=2;k<smsg1.length();k++){
-						a=smsg1.charAt(k);
-						if(a!='#'){
-							rname=rname+a;
-						}else {
-							k++;
-							break;
-						}
-					}
-
-					for(i=k;i<smsg1.length();i++){
-
-						a=smsg1.charAt(i);
-						if(a!='&'){
-							rLatitude=rLatitude+a;
-						}else {
-							i++;
-							break;
-						}
-					}
-
-					for(j=i;j<smsg1.length();j++){
-
-						a=smsg1.charAt(j);
-						if(a!='*'){
-							rLongitude=rLongitude+a;
-						}
-						else{
-							break;
-						}
-					}
-
-
-
-
-				}
-
-
-				Log.d(TAG,"latitude "+rLatitude+"longitude"+rLongitude+"name"+rname+"group"+rgroup);
-				Data setLatBt = ((Data)getApplicationContext());
-				setLatBt.setrLatitude(rLatitude);
-				Data setLonBt=((Data)getApplicationContext());
-				setLonBt.setrLongitude(rLongitude);
-				Data setrname = ((Data)getApplicationContext());
-				setrname.setrName(rname);
-				Data setrgroup=((Data)getApplicationContext());
-				setrgroup.setrFromID(rgroup);
-
-				Intent intent_map=new Intent(BTClient.this,Maptest.class);
-				startActivity(intent_map);
-
-
-			}
-		});
-
-
-
 */
+
 
 
 	}
@@ -210,7 +130,7 @@ public class BTClient extends AppCompatActivity {
 //正常send
 
 
-	public void onSendButtonClicked(View v){
+	/*public void onSendButtonClicked(View v){
 		int i=0;
 		int n=0;
 
@@ -255,114 +175,13 @@ public class BTClient extends AppCompatActivity {
 		//$+groupnum+name+#+latitude+&+longitude+*
 
 
-		/*Data getLat = ((Data)getApplicationContext());
-		String latitudeBt=getLat.getLatitude();
-		Data getLon=((Data)getApplicationContext());
-		String longitudeBt=getLon.getLongitude();
-		Data getGro = ((Data)getApplicationContext());
-		String mygr=getGro.getFromID();
-		Data getNam=((Data)getApplicationContext());
-		String myname=getNam.getName();
-
-		String locationSend=null;
-		if(latitudeBt!=null){
-			locationSend="$"+mygr+myname+"#"+latitudeBt+"&"+longitudeBt+"*";
-			System.out.println("\n \n I have gotten the location!!!");
-		}
-
-*/
-
-
-		/*try{
-			OutputStream os = _socket.getOutputStream();   //�������������
-
-			//byte[] bos = edit0.getText().toString().getBytes();
-			//byte[] bos =locationSend.getBytes();
-			//imageString=imageString+"12345";
-			byte[] bos = null;
-			if(imageString!=null){
-				bos=imageString.getBytes();
-				imageString=null;
-			}
-
-			*//*else if(locationSend!=null){
-				bos=locationSend.getBytes();
-				System.out.println("\n \n \nI'm sending the location!!");
-				System.out.println("\n\n\n\n"+mygr+myname);
-			}*//*
-			else if(edit0.getText().toString()!=null){
-				Log.d(TAG,edit0.getText().toString());
-				bos=("t"+edit0.getText().toString()).getBytes();
-				System.out.println("\n \n \nI'm sending the text!!");
-
-			}
-
-			for(i=0;i<bos.length;i++){
-				if(bos[i]==0x0a)n++;
-			}
-			byte[] bos_new = new byte[bos.length+n];
-			n=0;
-			for(i=0;i<bos.length;i++){
-				if(bos[i]==0x0a){
-					bos_new[n]=0x0d;
-					n++;
-					bos_new[n]=0x0a;
-				}else{
-					bos_new[n]=bos[i];
-				}
-				n++;
-			}
-			Log.d(TAG,edit0.getText().toString());
-			os.write(bos_new);
-		}catch(IOException e){
-		}*/
-	}
+	}*/
 
 
 
-
-//中继send
+//Start
 
 /*
-	public void send(String smsg){
-		int i=0;
-		int n=0;
-		try{
-
-			OutputStream os = _socket.getOutputStream();
-
-			//byte[] bos = edit0.getText().toString().getBytes();
-			//byte[] bos =locationSend.getBytes();
-			//imageString=imageString+"12345";
-			byte[] bos = null;
-
-			bos=smsg.getBytes();
-
-
-			for(i=0;i<bos.length;i++){
-				if(bos[i]==0x0a)n++;
-			}
-			byte[] bos_new = new byte[bos.length+n];
-			n=0;
-			for(i=0;i<bos.length;i++){ //�ֻ��л���Ϊ0a,�����Ϊ0d 0a���ٷ���
-				if(bos[i]==0x0a){
-					bos_new[n]=0x0d;
-					n++;
-					bos_new[n]=0x0a;
-				}else{
-					bos_new[n]=bos[i];
-				}
-				n++;
-			}
-
-			os.write(bos_new);
-		}catch(IOException e){
-		}
-	}
-
-*/
-
-
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch(requestCode){
 
@@ -398,7 +217,7 @@ public class BTClient extends AppCompatActivity {
 						return;
 					}
 
-/*
+*//*
 					try{
 						is = _socket.getInputStream();
 					}catch(IOException e){
@@ -410,7 +229,7 @@ public class BTClient extends AppCompatActivity {
 						bThread=true;
 					}else{
 						bRun = true;
-					}*/
+					}*//*
 
 					getData.setSocket(_socket);
 					Log.d(TAG,"Setting socket.");
@@ -428,93 +247,6 @@ public class BTClient extends AppCompatActivity {
 
 			default:break;
 		}
-	}
-
-/*
-
-	Thread ReadThread=new Thread(){
-
-		public void run(){
-			int num = 0;
-			byte[] buffer = new byte[1024];
-			byte[] buffer_new = new byte[1024];
-			int i = 0;
-			int n = 0;
-			bRun = true;
-			//�����߳�
-			while(true){
-				try{
-					while(is.available()==0){
-						while(bRun == false){}
-					}
-					while(true){
-						num = is.read(buffer);
-						n=0;
-
-						String s0 = new String(buffer,0,num);
-						fmsg+=s0;
-						for(i=0;i<num;i++){
-							if((buffer[i] == 0x0d)&&(buffer[i+1]==0x0a)){
-								buffer_new[n] = 0x0a;
-								i++;
-							}else{
-								buffer_new[n] = buffer[i];
-							}
-							n++;
-						}
-						String s = new String(buffer_new,0,n);
-						smsg+=s;
-						if(is.available()==0)break;
-					}
-
-					if(smsg.equals("1234"))
-						text0.setText("123");
-					handler.sendMessage(handler.obtainMessage());
-				}catch(IOException e){
-				}
-			}
-		}
-	};
-*/
-
-/*
-	Handler handler= new Handler(){
-
-		public void handleMessage(Message msg){
-			super.handleMessage(msg);
-			if(smsg.charAt(0)=='i') {
-				if ((smsg.charAt(smsg.length() - 1) == '5')
-						&& (smsg.charAt(smsg.length() - 2) == '4')
-						&& (smsg.charAt(smsg.length() - 3) == '3')
-						&& (smsg.charAt(smsg.length() - 4) == '2')
-						&& (smsg.charAt(smsg.length() - 5) == '1')) {
-//					dis.setText(smsg.substring(0,smsg.length()-5));
-					bm = string2Bitmap(smsg.substring(0, smsg.length() - 5));
-					iv.setImageBitmap(bm);
-////////////////					send(smsg);
-				}
-			}
-			if(smsg.charAt(0)=='t'){
-				dis.setText(smsg.substring(1));
-				//	dis.setText(smsg.substring(1));
-//////////////////////				send(smsg.substring(1));
-//				clear();
-			}
-			//dis.setText(smsg);
-			sv.scrollTo(0, dis.getMeasuredHeight());
-
-		}
-	};*/
-
-
-	public void onDestroy(){
-		super.onDestroy();
-		/*if(_socket!=null)
-			try{
-				_socket.close();
-			}catch(IOException e){}*/
-		Log.d(TAG,"BTClient destroyed.");
-
 	}
 
 
@@ -543,39 +275,20 @@ public class BTClient extends AppCompatActivity {
 			}catch(IOException e){}
 		}
 		return;
-	}
-
-
-	/*public void onClearButtonClicked(View v){
-		smsg="";
-		fmsg="";
-		dis.setText(smsg);
-		iv.setImageBitmap(null);
-		return;
-	}
-
-	public void clear(){
-		smsg="";
-		fmsg="";
-		return;
-	}
-*/
-
-
-	/*public static Bitmap string2Bitmap(String st)
-	{
-		// OutputStream out;
-		Bitmap bitmap = null;
-		try
-		{
-			byte[] bitmapArray= Base64.decode(st, Base64.DEFAULT);
-			ByteArrayInputStream baos = new ByteArrayInputStream(bitmapArray);
-			bitmap = BitmapFactory.decodeStream(baos);
-			return bitmap;
-		}
-		catch (Exception e)
-		{
-			return null;
-		}
 	}*/
+
+//End
+
+	public void onDestroy(){
+		super.onDestroy();
+		/*if(_socket!=null)
+			try{
+				_socket.close();
+			}catch(IOException e){}*/
+		Log.d(TAG,"BTClient destroyed.");
+
+	}
+
+
+
 }

@@ -16,18 +16,15 @@ import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity implements OnClickListener {
 
-    static String name,groupNum;
+    static String name,myID;
     BluetoothSocket _socket = null;
     Data getData;
     String TAG="LoginActivity";
     String toID;
     String message;
     String BROADCASTID="00000000";
-    private final static String ROUTE_DISCOVERY ="1";
-    private final static String DIALOGUE ="2";
     private final static String RESCUE_INFORMATION ="3";
-    private final static String ROAD_CONDITION ="4";
-    private final static String Acknowledgement="5";
+
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -41,14 +38,17 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         Button chat=(Button) findViewById(R.id.chat);
         Button home=(Button) findViewById(R.id.home);
         ImageButton helpButton =(ImageButton)findViewById(R.id.help_button_login);
-
-        getData=((Data)getApplicationContext());
-
         location.setOnClickListener(this);
         home.setOnClickListener(this);
         chat.setOnClickListener(this);
         SignInButton.setOnClickListener(this);
         helpButton.setOnClickListener(this);
+
+        getData=((Data)getApplicationContext());
+        name=getData.getName();
+        myID=getData.getFromID();
+
+
 
     }//onCreate end
 
@@ -63,28 +63,24 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                 EditText mEmailView = (EditText) findViewById(R.id.email);
                 name = mEmailView.getText().toString();
                 EditText groupView = (EditText) findViewById(R.id.password);
-                groupNum = groupView.getText().toString();
+                myID = groupView.getText().toString();
 
-                Data sname = ((Data)getApplicationContext());
-                sname.setName(name);
-                Data sgroupNum=((Data)getApplicationContext());
-                sgroupNum.setFromID(groupNum);
+                getData.setName(name);
+                getData.setFromID(myID);
 
-
-                Log.i("Edit", "User name" + name);//Show the name and group number in the log
-                Log.i("Edit", "Group number" + groupNum);
-
+/*
                 Intent intent = new Intent(LoginActivity.this, Maptest.class);
                 //Intent intent = new Intent(LoginActivity.this, MapActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putCharSequence("name", name);
                 bundle.putCharSequence("GroupNum", groupNum);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivity(intent);*/
                 break;
 
             case R.id.location:
-                if(name==null||groupNum==null){
+
+                if(name.equals("FFFF")||myID.equals("FFFF")){
                     new AlertDialog.Builder(LoginActivity.this).setTitle("Warning")//设置对话框标题
 
                             .setMessage("请输入组号及用户名并点击登录")//设置显示的内容
@@ -135,7 +131,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
             String name = getData.getName();
             String myID = getData.getFromID();
             Log.d(TAG, "Get data: " + name + "/" + myID);
-            if(name.equals("FFFFFFFF")){
+            if(name.equals("FFFF")||myID.equals("FFFF")){
                 Toast.makeText(LoginActivity.this,"Please login first.",Toast.LENGTH_SHORT).show();
                 return;
             }

@@ -55,10 +55,10 @@
 
     <ImageButton
         android:id="@+id/help_button_login"
-        android:layout_width="249dp"
-        android:layout_height="264dp"
-        android:background="@mipmap/help_button"
-        app:srcCompat="@mipmap/help_button" />
+        android:layout_width="160dp"
+        android:layout_height="251dp"
+        android:background="@mipmap/button_help"
+        app:srcCompat="@mipmap/button_help" />
 
     <LinearLayout
         android:orientation="horizontal"
