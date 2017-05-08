@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import java.io.OutputStream;
+
 
 public class LoginActivity extends AppCompatActivity implements OnClickListener {
 
@@ -28,8 +30,18 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 
     protected void onCreate(Bundle savedInstanceState) {
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        /*try{
+                _socket = getData.getSocket();
+
+        }catch (Exception e){
+            Toast.makeText(LoginActivity.this,"Please connect to the bluetooth module first.",Toast.LENGTH_SHORT).show();
+
+        }*/
 
         //Intent intent=getIntent();
 
@@ -47,6 +59,8 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         getData=((Data)getApplicationContext());
         name=getData.getName();
         myID=getData.getFromID();
+
+
 
 
 
@@ -106,54 +120,15 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                 Intent chatIntent=new Intent(LoginActivity.this,BTClient.class);
                 startActivity(chatIntent);
                 break;
-            case R.id.help_button_login:
+            /*case R.id.help_button_login:
                 sendHelp();
-                break;
+                break;*/
             default:
                 break;
         }
     }
 
 
-    public void sendHelp() {
-
-       /* try{
-            if (_socket == null) {
-                Log.d(TAG, "Socket is null");
-                //Data applicationConstant = ((Data)getApplicationContext());
-                _socket = getData.getSocket();
-            }
-
-        }catch (Exception e){
-            Toast.makeText(LoginActivity.this,"Please connect to the bluetooth module first.",Toast.LENGTH_SHORT).show();
-        }*/
-
-
-        try{
-            String name = getData.getName();
-            String myID = getData.getFromID();
-            Log.d(TAG, "Get data: " + name + "/" + myID);
-            if(name.equals("FFFF")||myID.equals("FFFF")){
-                Toast.makeText(LoginActivity.this,"Please login first.",Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            //The help message will be broadcast.
-            message = "Help！";//+location
-            String route;
-            String broadcastCount="0";
-
-            SendMessage sendMessage = new SendMessage(getApplicationContext());
-
-            toID = BROADCASTID;
-            route = myID + "/";
-            sendMessage.sendFormatMessage(RESCUE_INFORMATION, broadcastCount, name, myID, toID, route, message);
-
-        }catch (Exception e){
-            Toast.makeText(LoginActivity.this,"Please connect to the bluetooth module first.",Toast.LENGTH_SHORT).show();
-        }
-
-    }
 
 }
 

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 public class RescueInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
     String TAG="RescueInfoActivity";
+    private final static String RESCUE_INFORMATION ="3";
 
     CacheUtils cacheUtils;
     ArrayList<String> rescueMessages;
@@ -24,15 +26,27 @@ public class RescueInfoActivity extends AppCompatActivity implements View.OnClic
     ListAdapter adapter;
     Button cleanButton;
     Button refreshButton;
+    Button sendButton;
+    Data getData;
+    String myName;
+    String myID;
+    EditText editText;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rescueinfo);
+        getData=((Data)getApplicationContext());
+        myName=getData.getName();
+        myID=getData.getFromID();
 
         cleanButton=(Button)findViewById(R.id.clean_rescue);
         refreshButton=(Button)findViewById(R.id.refresh_dialogue_rescue);
+        sendButton=(Button)findViewById(R.id.send_rescue);
+        editText=(EditText)findViewById(R.id.Edit0_resuce);
         refreshButton.setOnClickListener(this);
         cleanButton.setOnClickListener(this);
+        sendButton.setOnClickListener(this);
+
 
         cacheUtils=new CacheUtils();
         rescueMessages=new ArrayList<>();
@@ -81,7 +95,16 @@ public class RescueInfoActivity extends AppCompatActivity implements View.OnClic
                     e.getStackTrace();
                 }
                 break;
-
+            case R.id.send_rescue:
+                SendMessage sendMessage=new SendMessage(getApplicationContext());
+                String route=myID+"/";
+                String messeage=editText.getText().toString();
+                if(messeage.equals("")||messeage==null){
+                    Toast.makeText(RescueInfoActivity.this,"Can not send an empty message.",Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                sendMessage.sendFormatMessage(RESCUE_INFORMATION,"0",myName,myID,"0000",route,messeage);
+                break;
             default:
                 break;
         }

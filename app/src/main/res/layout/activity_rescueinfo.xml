@@ -8,28 +8,18 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 
-		<EditText
-			android:id="@+id/to_user_rescue"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentLeft="true"
-			android:layout_alignParentStart="true"
-			android:layout_alignParentTop="true"
-			android:ems="10"
-			android:hint="To:"
-			android:inputType="textPersonName" />
 	</RelativeLayout>
 
 	<TextView
 		android:id="@+id/Text0"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="Rescue Information" />
+		android:text="RESCUE INFORMATION" />
 
 	<ListView
 		android:id="@+id/rescue_list"
 		android:layout_width="match_parent"
-		android:layout_height="369dp" />
+		android:layout_height="394dp" />
 
 	<LinearLayout
         android:orientation="horizontal"

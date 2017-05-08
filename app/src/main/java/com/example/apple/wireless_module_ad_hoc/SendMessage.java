@@ -87,24 +87,39 @@ public class SendMessage {
             case DIALOGUE:
                 //Log.d(TAG,"Start send dialogue.");
                 sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message+"/>";
-                try{
-                    jsonObject.put("message",message);
-                    jsonObject.put("toID",toID);
-                    jsonObject.put("fromID",fromID);
-                    jsonObject.put("name",name);
-                    // jsonObject.put("broadcastCount",broadcastCount);
-                    jsonObject.put("type",type);
+                if(broadcastCount.equals("0")){
+                    try{
+                        jsonObject.put("message",message);
+                        jsonObject.put("toID",toID);
+                        jsonObject.put("fromID",fromID);
+                        jsonObject.put("name",name);
+                        // jsonObject.put("broadcastCount",broadcastCount);
+                        jsonObject.put("type",type);
 
-                }catch (JSONException e){
-                    Log.d(TAG,"Failed to set JSON.");
+                    }catch (JSONException e){
+                        Log.d(TAG,"Failed to set JSON.");
+                    }
+                    cacheUtils.writeJson(context,jsonObject.toString(),"dialogue.txt",true);
                 }
-                cacheUtils.writeJson(context,jsonObject.toString(),"dialogue.txt",true);
-                sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message+"/>";
                 break;
 
             case RESCUE_INFORMATION:
                 sendingMessage=type+'|'+broadcastCount+'|'+name+'|'+fromID+'|'+route+"|"+message+"/>";
                 //Broadcasting the message.
+                if(broadcastCount.equals("0")){
+                    try{
+                        jsonObject.put("message",message);
+                      //  jsonObject.put("toID",toID);
+                        jsonObject.put("fromID",fromID);
+                        jsonObject.put("name",name);
+                        // jsonObject.put("broadcastCount",broadcastCount);
+                        jsonObject.put("type",type);
+
+                    }catch (JSONException e){
+                        Log.d(TAG,"Failed to set JSON.");
+                    }
+                    cacheUtils.writeJson(context,jsonObject.toString(),"rescue_info.txt",true);
+                }
                 break;
 
             case ROAD_CONDITION:
@@ -113,7 +128,8 @@ public class SendMessage {
                 break;
 
             default:
-                Toast.makeText(context,"The data format is invalid.",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context,"The data format is invalid.",Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"The data format is invalid");
                 return;
 
         }
@@ -143,8 +159,11 @@ public class SendMessage {
             }
             int bCount=Integer.parseInt(broadcastCount);
             //It is unnecessary to get ack when relaying the massages.
-            if(bCount==0&&(!type.equals(Acknowledgement))){
-                getAckThread.start();
+            if(bCount==0){
+                if(type.equals(ROUTE_DISCOVERY)||type.equals(DIALOGUE)){
+                    getAckThread.start();
+                }
+
             }
 
             os.write(bos_new);
@@ -172,7 +191,7 @@ public class SendMessage {
 
                     //waiting for response... /5s
                     //Toast.makeText(context,"Failed to reach to the destination.",Toast.LENGTH_SHORT).show();
-                    Toast.makeText(context,"Unsent",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(,"Unsent",Toast.LENGTH_SHORT).show();
                     Log.d(TAG,"Failed to reach to the destination.");
                     break;
                 }else{

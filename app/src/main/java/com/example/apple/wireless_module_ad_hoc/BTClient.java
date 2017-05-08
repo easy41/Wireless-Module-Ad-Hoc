@@ -63,7 +63,6 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 	String message;
 	private final static String ROUTE_DISCOVERY ="1";
 	private final static String DIALOGUE ="2";
-	private final static String RESCUE_INFORMATION ="3";
 	private final static String ROAD_CONDITION ="4";
 
 	//final static String smsg1;
@@ -82,6 +81,7 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_btclient);
+
 
 		//text0 = (TextView)findViewById(R.id.Text0);
 		edit0 = (EditText)findViewById(R.id.Edit0);
@@ -199,6 +199,15 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 		String broadCastCount="0";
 		toID=toUser.getText().toString();
 		message=edit0.getText().toString();
+		if (message.equals("")){
+			Toast.makeText(BTClient.this,"Can not send an empty message.",Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if(toID.equals("")){
+			Toast.makeText(BTClient.this,"Please input the destination ID.",Toast.LENGTH_SHORT).show();
+			return;
+		}
+
 		String route;
 
 		String name=getData.getName();
@@ -227,12 +236,12 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 
 		//sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,route,"Hello!");
 
-		try{
+		/*try{
 			String getCache=cacheUtils.readJson(BTClient.this,"dialogue.txt").toString();
 			Log.d(TAG,"!!!!!: "+getCache);
 		}catch (Exception e){
 			e.getStackTrace();
-		}
+		}*/
 
 	}
 
