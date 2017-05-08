@@ -2,6 +2,9 @@ package com.example.apple.wireless_module_ad_hoc;
 
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,10 +13,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.content.Intent;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
-import java.io.OutputStream;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 public class LoginActivity extends AppCompatActivity implements OnClickListener {
@@ -25,6 +30,10 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
     String toID;
     String message;
     String BROADCASTID="00000000";
+    CacheUtils cacheUtils;
+    EditText nameTextView;
+    EditText IDTextView;
+
     private final static String RESCUE_INFORMATION ="3";
 
 
@@ -33,7 +42,6 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         /*try{
                 _socket = getData.getSocket();
@@ -49,23 +57,44 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         Button location= (Button) findViewById(R.id.location);
         Button chat=(Button) findViewById(R.id.chat);
         Button home=(Button) findViewById(R.id.home);
-        ImageButton helpButton =(ImageButton)findViewById(R.id.help_button_login);
         location.setOnClickListener(this);
         home.setOnClickListener(this);
         chat.setOnClickListener(this);
         SignInButton.setOnClickListener(this);
-        helpButton.setOnClickListener(this);
+
+        nameTextView = (EditText) findViewById(R.id.email);
+        IDTextView = (EditText) findViewById(R.id.password);
 
         getData=((Data)getApplicationContext());
         name=getData.getName();
         myID=getData.getFromID();
 
+        cacheUtils=new CacheUtils();
+        ArrayList<String> list=cacheUtils.readJson(LoginActivity.this,"login.txt");
+        JSONObject jsonObject;
+
+        String parsedData;
+        for(String s:list){
+            try{
+                jsonObject=new JSONObject(s);
+                myID=jsonObject.get("myID").toString();
+                name=jsonObject.get("myName").toString();
+                getData.setName(name);
+                getData.setFromID(myID);
+                nameTextView.setText(name);
+                IDTextView.setText(myID);
+                Log.d(TAG,"Login: "+name+"|"+myID);
+            }catch (JSONException e){
+                e.getStackTrace();
+            }
+
+        }
 
 
+        //isWifiConnected(LoginActivity.this);
 
 
     }//onCreate end
-
 
 
 
@@ -74,13 +103,20 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         switch (v.getId()){
 
             case R.id.email_sign_in_button:
-                EditText mEmailView = (EditText) findViewById(R.id.email);
-                name = mEmailView.getText().toString();
-                EditText groupView = (EditText) findViewById(R.id.password);
-                myID = groupView.getText().toString();
+
+                name = nameTextView.getText().toString();
+                myID = IDTextView.getText().toString();
 
                 getData.setName(name);
                 getData.setFromID(myID);
+                JSONObject jsonObject=new JSONObject();
+                try{
+                    jsonObject.put("myName",name);
+                    jsonObject.put("myID",myID);
+                }catch (JSONException e){
+                    e.getStackTrace();
+                }
+                cacheUtils.writeJson(LoginActivity.this,jsonObject.toString(),"login.txt",false);
                 Toast.makeText(LoginActivity.this,"Login successfully!",Toast.LENGTH_SHORT).show();
 
 /*

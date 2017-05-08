@@ -2,6 +2,8 @@ package com.example.apple.wireless_module_ad_hoc;
 
 import android.location.LocationListener;
 import android.location.LocationProvider;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -15,6 +17,7 @@ import android.location.Location;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.mapapi.map.MapView;
@@ -23,6 +26,10 @@ import com.baidu.mapapi.map.BaiduMap;
 
 import java.util.ArrayList;
 import java.util.*;
+
+import com.baidu.mapapi.map.offline.MKOLUpdateElement;
+import com.baidu.mapapi.map.offline.MKOfflineMap;
+import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -66,6 +73,9 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
     String myName;
     Button helpButton;
     Location location;
+    MKOfflineMap mkOfflineMap;
+    private TextView stateView;
+    //MKOLUpdateElement update;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +87,13 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
         mMapView = (MapView) findViewById(R.id.bmapView);
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+        stateView = (TextView) findViewById(R.id.state);
 
         getData = ((Data)getApplicationContext());
         myName=getData.getName();
         myID=getData.getFromID();
+
+        //update = mkOfflineMap.getUpdateInfo(state);
 
 
         condition=(EditText)findViewById(R.id.editText);
@@ -105,6 +118,7 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
 
         location = locationManager.getLastKnownLocation(provider);
         setLocation(location);
+        offlineMap();
 
     }//onCreate END
 
@@ -473,6 +487,104 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
 
     }
 
+    public void offlineMap(){
+        boolean wifi=isWifiConnected(Maptest.this);
+        if(wifi){
+            mkOfflineMap=new MKOfflineMap();
+            MKOfflineMapListener listener=new MKOfflineMapListener() {
+                @Override
+                public void onGetOfflineMapState(int type, int state) {
+                    switch (type) {
+                        case MKOfflineMap.TYPE_DOWNLOAD_UPDATE: {
+                            MKOLUpdateElement update = mkOfflineMap.getUpdateInfo(state);
+                            // 处理下载进度更新提示,与百度地图官方的app有冲突
+                            if (update != null) {
+                                //stateView.setText(update.cityName+": "+update.ratio);
+                                Log.d(TAG,update.cityName+": "+update.ratio);
+                                //updateView();
+                            }
+                        }
+                        break;
+                        case MKOfflineMap.TYPE_NEW_OFFLINE:
+                            // 有新离线地图安装
+                            Log.d("OfflineDemo", String.format("add offlinemap num:%d", state));
+                            break;
+                        case MKOfflineMap.TYPE_VER_UPDATE:
+                            // 版本更新提示
+                            // MKOLUpdateElement e = mOffline.getUpdateInfo(state);
+
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+            };
+            Boolean initial=mkOfflineMap.init(listener);
+            if(initial){
+                int cityID=131;//Beijing
+                mkOfflineMap.start(cityID);
+                Log.d(TAG,"Start to download the offline map.");
+                Toast.makeText(this, "Start to download the offline map.", Toast.LENGTH_SHORT).show();
+                //stateThread.start();
+
+            }
+
+        }
+    }
+
+    /*@Override
+    public void onGetOfflineMapState(int type, int state) {
+        switch (type) {
+            case MKOfflineMap.TYPE_DOWNLOAD_UPDATE: {
+                MKOLUpdateElement update = mkOfflineMap.getUpdateInfo(state);
+                // 处理下载进度更新提示
+                if (update != null) {
+                    stateView.setText(update.cityName+": "+update.ratio);
+                    //updateView();
+                }
+            }
+            break;
+            case MKOfflineMap.TYPE_NEW_OFFLINE:
+                // 有新离线地图安装
+                Log.d("OfflineDemo", String.format("add offlinemap num:%d", state));
+                break;
+            case MKOfflineMap.TYPE_VER_UPDATE:
+                // 版本更新提示
+                // MKOLUpdateElement e = mOffline.getUpdateInfo(state);
+
+                break;
+            default:
+                break;
+        }
+
+    }*/
+
+    Thread stateThread=new Thread() {
+
+        public void run() {
+
+
+        }
+
+    };
+
+
+
+
+    public boolean isWifiConnected(Context context)
+    {
+        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifiNetworkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if(wifiNetworkInfo.isConnected())
+        {
+            Toast.makeText(context,"WiFi connected",Toast.LENGTH_SHORT).show();
+            return true ;
+        }
+        Toast.makeText(context,"WiFi disconnected",Toast.LENGTH_SHORT).show();
+        return false ;
+    }
+
 
     /*
         Lifecycle
@@ -482,6 +594,10 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
     protected void onDestroy() {
         super.onDestroy();
         locationManager.removeUpdates(locationListener);
+        /**
+         * 退出时，销毁离线地图模块
+         */
+        //mkOfflineMap.destroy();
         mMapView.onDestroy();
 
     }

@@ -26,8 +26,8 @@
 		android:layout_alignParentStart="true"
 		android:layout_alignParentTop="true"
 		android:ems="10"
-		android:hint="To:"
-		android:inputType="textPersonName" />
+		android:hint="To:(ID,number only)"
+		android:inputType="number" />
 
 	<ImageView
 		android:layout_width="300dp"
