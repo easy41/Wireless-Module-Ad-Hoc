@@ -2,6 +2,7 @@ package com.example.apple.wireless_module_ad_hoc;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,24 +56,25 @@ public class ReceiveMessage {
         //Check the validity of receiving message.
         if(infoArray.length==6||infoArray.length==7){
             type=infoArray[0];
-            try {
+
+            //try {
                 broadcastCount=infoArray[1];
                 bCount=Integer.parseInt(broadcastCount);
                 rName =infoArray[2];
                 rFromID=infoArray[3];
-                jsonObject.put("type",infoArray[0]);
+                /*jsonObject.put("type",infoArray[0]);
                 jsonObject.put("broadcastCount",infoArray[1]);
                 jsonObject.put("rName",infoArray[2]);
-                jsonObject.put("fromID",infoArray[3]);
+                jsonObject.put("fromID",infoArray[3]);*/
 
                 //'1' is a char;"1" is a String.
                 if(type.equals("1")||type.equals("2")||type.equals("5")){
                     toID=infoArray[4];
                     route=infoArray[5];
                     message=infoArray[6];
-                    jsonObject.put("toID",infoArray[4]);
+                   /* jsonObject.put("toID",infoArray[4]);
                     jsonObject.put("route",infoArray[5]);
-                    jsonObject.put("message",infoArray[6]);
+                    jsonObject.put("message",infoArray[6]);*/
                 }
                 else {
                     route=infoArray[4];
@@ -80,12 +82,10 @@ public class ReceiveMessage {
                    // jsonObject.put("message",infoArray[4]);
                 }
                 getData.setrJson(jsonObject);
-
-                //TODO: Store the message into the log.xml.
-
-            }catch (JSONException e){
+            /*}catch (JSONException e){
                 e.getStackTrace();
-            }
+            }*/
+
         }
         else {
             //When receive an invalid message format.
@@ -93,13 +93,27 @@ public class ReceiveMessage {
             return;
         }
 
+        CacheUtils cacheUtils=new CacheUtils();
         switch(type){
             case ROUTE_DISCOVERY:
                 //  myID=destination
                 if(toID.equals(myID)){
                     Log.d(TAG,"I'm the destination.");
 
-                    //TODO: display the message to the user here.
+                    //display the message to the user here.
+                    try{
+                        jsonObject.put("message",message);
+                        jsonObject.put("toID",toID);
+                        jsonObject.put("fromID",rFromID);
+                        jsonObject.put("name",rName);
+                        // jsonObject.put("broadcastCount",broadcastCount);
+                        jsonObject.put("type",type);
+
+                    }catch (JSONException e){
+                        Log.d(TAG,"Failed to set JSON.");
+                    }
+                    cacheUtils.writeJson(context,jsonObject.toString(),"dialogue.txt",true);
+
 
                     //Send acknowledgement and complete route back to the source.
                     //hypothesis: There is no delay for the Ack.
@@ -128,6 +142,7 @@ public class ReceiveMessage {
                 //toID=myID
                 if(toID.equals(myID)){
                     getData.setRoute(route);
+                    getData.setAckFlag(1);
                     Log.d(TAG,"The new route is: "+getData.getRoute());
                 }
                 else{
@@ -180,7 +195,19 @@ public class ReceiveMessage {
                     sendMessage.sendFormatMessage(Acknowledgement,"0",name,fromID,rFromID,route,"Ack");
                     Log.d(TAG,"Send back dialogue ack.");
 
-                    //TODO: display the message
+                    //display the message to the user here.
+                    try{
+                        jsonObject.put("message",message);
+                        jsonObject.put("toID",toID);
+                        jsonObject.put("fromID",rFromID);
+                        jsonObject.put("name",rName);
+                        // jsonObject.put("broadcastCount",broadcastCount);
+                        jsonObject.put("type",type);
+
+                    }catch (JSONException e){
+                        Log.d(TAG,"Failed to set JSON.");
+                    }
+                    cacheUtils.writeJson(context,jsonObject.toString(),"dialogue.txt",true);
 
                 }
                 else{
@@ -239,7 +266,18 @@ public class ReceiveMessage {
 
                     Log.d(TAG,"The new rescue information is: "+message);
 
-                    //TODO: display the rescue information
+                    //display the message to the user here.
+                    try{
+                        jsonObject.put("message",message);
+                        jsonObject.put("fromID",rFromID);
+                        jsonObject.put("name",rName);
+                        // jsonObject.put("broadcastCount",broadcastCount);
+                        jsonObject.put("type",type);
+
+                    }catch (JSONException e){
+                        Log.d(TAG,"Failed to set JSON.");
+                    }
+                    cacheUtils.writeJson(context,jsonObject.toString(),"rescue_info.txt",true);
 
                     if (bCount<7){
                         bCount++;
@@ -270,6 +308,19 @@ public class ReceiveMessage {
                     Log.d(TAG,"The new road condition is: "+message);
 
                     //TODO: display the road condition
+                    //TODO: never send the road condition
+                    //display the message to the user here.
+                    try{
+                        jsonObject.put("message",message);
+                        jsonObject.put("fromID",rFromID);
+                        jsonObject.put("name",rName);
+                        // jsonObject.put("broadcastCount",broadcastCount);
+                        jsonObject.put("type",type);
+
+                    }catch (JSONException e){
+                        Log.d(TAG,"Failed to set JSON.");
+                    }
+                    cacheUtils.writeJson(context,jsonObject.toString(),"road.txt",true);
 
                     if (bCount<7){
                         bCount++;

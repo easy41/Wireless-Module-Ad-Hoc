@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 
                 getData.setName(name);
                 getData.setFromID(myID);
+                Toast.makeText(LoginActivity.this,"Login successfully!",Toast.LENGTH_SHORT).show();
 
 /*
                 Intent intent = new Intent(LoginActivity.this, Maptest.class);

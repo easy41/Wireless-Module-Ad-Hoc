@@ -5,6 +5,9 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -26,6 +29,7 @@ public class SendMessage {
     String TAG="SendMessage";
 
     Data getData;
+    String fileName="json.txt";
 
 
     public SendMessage(Context context){
@@ -39,6 +43,7 @@ public class SendMessage {
         int n=0;
         String sendingMessage;
         getData = ((Data)context);
+        JSONObject jsonObject=new JSONObject();
 
 
         /*getData = ((Data)context);
@@ -55,28 +60,58 @@ public class SendMessage {
           *     4.Road condition broadcasting information
          */
 
-
+        CacheUtils cacheUtils=new CacheUtils();
         switch (type){
             case ROUTE_DISCOVERY:
                 //Log.d(TAG,"Start route discovery.");
                 sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message+"/>";
+                try{
+                    jsonObject.put("message",message);
+                    jsonObject.put("toID",toID);
+                    jsonObject.put("fromID",fromID);
+                    jsonObject.put("name",name);
+                   // jsonObject.put("broadcastCount",broadcastCount);
+                    jsonObject.put("type",type);
+
+                }catch (JSONException e){
+                    Log.d(TAG,"Failed to set JSON.");
+                }
+                cacheUtils.writeJson(context,jsonObject.toString(),"dialogue.txt",true);
                 break;
+
             case Acknowledgement:
                 //Log.d(TAG,"Start to send Ack.");
                 sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+"Ack"+"/>";
                 break;
+
             case DIALOGUE:
                 //Log.d(TAG,"Start send dialogue.");
                 sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message+"/>";
+                try{
+                    jsonObject.put("message",message);
+                    jsonObject.put("toID",toID);
+                    jsonObject.put("fromID",fromID);
+                    jsonObject.put("name",name);
+                    // jsonObject.put("broadcastCount",broadcastCount);
+                    jsonObject.put("type",type);
+
+                }catch (JSONException e){
+                    Log.d(TAG,"Failed to set JSON.");
+                }
+                cacheUtils.writeJson(context,jsonObject.toString(),"dialogue.txt",true);
+                sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message+"/>";
                 break;
+
             case RESCUE_INFORMATION:
                 sendingMessage=type+'|'+broadcastCount+'|'+name+'|'+fromID+'|'+route+"|"+message+"/>";
                 //Broadcasting the message.
                 break;
+
             case ROAD_CONDITION:
                 sendingMessage=type+'|'+broadcastCount+'|'+name+'|'+fromID+'|'+route+'|'+message+"/>";
                 //Broadcasting the message.
                 break;
+
             default:
                 Toast.makeText(context,"The data format is invalid.",Toast.LENGTH_SHORT).show();
                 return;
@@ -131,7 +166,7 @@ public class SendMessage {
             while(ackFlag==0){
                 t2 = System.currentTimeMillis();
                 //Log.d(TAG,"Ack Thread running...");
-                if(t2-t1 > 1000){//1ms
+                if(t2-t1 > 3*1000){//1ms
 
                     //TODO: simulation to calculate the waiting time.
 
@@ -143,6 +178,9 @@ public class SendMessage {
                     ackFlag=getData.getAckFlag();
                 }
 
+            }
+            if(ackFlag==1){
+                Log.d(TAG,"sent");
             }
 
 
