@@ -19,7 +19,7 @@ public class Image extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.blue_main);
+        setContentView(R.layout.activity_btclient);
         Log.v("tag","message");
 
         Intent intent = new Intent();

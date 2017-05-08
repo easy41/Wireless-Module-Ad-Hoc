@@ -1,12 +1,8 @@
 package com.example.apple.wireless_module_ad_hoc;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -79,12 +75,13 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 	Button sendButton;
 	Button cleanButton;
 	Button refreshButton;
+	Button rescueButton;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.blue_main);
+		setContentView(R.layout.activity_btclient);
 
 		//text0 = (TextView)findViewById(R.id.Text0);
 		edit0 = (EditText)findViewById(R.id.Edit0);
@@ -103,9 +100,11 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 		sendButton=(Button)findViewById(R.id.send);
 		cleanButton=(Button)findViewById(R.id.clean);
 		refreshButton=(Button)findViewById(R.id.refresh_dialogue);
+		rescueButton=(Button)findViewById(R.id.rescue_info);
 		sendButton.setOnClickListener(this);
 		cleanButton.setOnClickListener(this);
 		refreshButton.setOnClickListener(this);
+		rescueButton.setOnClickListener(this);
 
 		/*
 			ListView
@@ -128,7 +127,7 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 		for(String s:list){
 			try{
 				jsonObject=new JSONObject(s);
-				Log.d(TAG,jsonObject.toString());
+				//Log.d(TAG,jsonObject.toString());
 				parsedData="From: "+jsonObject.get("fromID").toString()+" | To: "+jsonObject.get("toID")+"\n"+jsonObject.get("message");
 				dialogueList.add(parsedData);
 			}catch (JSONException e){
@@ -160,52 +159,7 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 		switch (v.getId()) {
 
 			case R.id.send:
-				int i=0;
-				int n=0;
-
-		/*if(_socket==null){
-			Log.d(TAG,"Socket is null");
-			//Data applicationConstant = ((Data)getApplicationContext());
-			_socket=getData.getSocket();
-		}*/
-
-				String broadCastCount="0";
-				toID=toUser.getText().toString();
-				message=edit0.getText().toString();
-				String route;
-
-				String name=getData.getName();
-				String fromID=getData.getFromID();
-				Log.d(TAG,"Get data: "+name+"/"+fromID);
-
-				SendMessage sendMessage=new SendMessage(getApplicationContext());
-
-				//Check the stored routing table.
-				if(!getData.getRoute().equals("0000")){
-					String[] s=getData.getRoute().split("/");
-					String storeDest=s[s.length-1];
-					if(storeDest.equals(toID)){
-						route=getData.getRoute();
-						Log.d(TAG,"Get stored route: "+route);
-						sendMessage.sendFormatMessage(DIALOGUE,broadCastCount,name,fromID,toID,route,message);
-					}else {
-						route=getData.getFromID()+"/";
-						sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,message);
-					}
-				}
-				else {
-					route=getData.getFromID()+"/";
-					sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,message);
-				}
-
-				//sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,route,"Hello!");
-
-				try{
-					String getCache=cacheUtils.readJson(BTClient.this,"dialogue.txt").toString();
-					Log.d(TAG,"!!!!!: "+getCache);
-				}catch (Exception e){
-					e.getStackTrace();
-				}
+				send();
 				break;
 
 			case R.id.clean:
@@ -215,9 +169,15 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 				}catch (Exception e){
 					e.getStackTrace();
 				}
+				break;
 
 			case R.id.refresh_dialogue:
 				getDialogueList();
+				break;
+
+			case R.id.rescue_info:
+				Intent rescueIntent=new Intent(BTClient.this,RescueInfoActivity.class);
+				startActivity(rescueIntent);
 				break;
 
 			default:
@@ -226,6 +186,55 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 	}
 
 
+	public void send(){
+		int i=0;
+		int n=0;
+
+		/*if(_socket==null){
+			Log.d(TAG,"Socket is null");
+			//Data applicationConstant = ((Data)getApplicationContext());
+			_socket=getData.getSocket();
+		}*/
+
+		String broadCastCount="0";
+		toID=toUser.getText().toString();
+		message=edit0.getText().toString();
+		String route;
+
+		String name=getData.getName();
+		String fromID=getData.getFromID();
+		Log.d(TAG,"Get data: "+name+"/"+fromID);
+
+		SendMessage sendMessage=new SendMessage(getApplicationContext());
+
+		//Check the stored routing table.
+		if(!getData.getRoute().equals("0000")){
+			String[] s=getData.getRoute().split("/");
+			String storeDest=s[s.length-1];
+			if(storeDest.equals(toID)){
+				route=getData.getRoute();
+				Log.d(TAG,"Get stored route: "+route);
+				sendMessage.sendFormatMessage(DIALOGUE,broadCastCount,name,fromID,toID,route,message);
+			}else {
+				route=getData.getFromID()+"/";
+				sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,message);
+			}
+		}
+		else {
+			route=getData.getFromID()+"/";
+			sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,message);
+		}
+
+		//sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,route,"Hello!");
+
+		try{
+			String getCache=cacheUtils.readJson(BTClient.this,"dialogue.txt").toString();
+			Log.d(TAG,"!!!!!: "+getCache);
+		}catch (Exception e){
+			e.getStackTrace();
+		}
+
+	}
 
 
 /*

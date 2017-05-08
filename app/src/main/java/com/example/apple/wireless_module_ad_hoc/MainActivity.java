@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //DeviceListActivity
-        Button btn = (Button) findViewById(R.id.Button03);
+        //Button btn = (Button) findViewById(R.id.Button03);
         if(_socket==null){
             Intent serverIntent = new Intent(MainActivity.this, DeviceListActivity.class);
             startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 _socket.close();
                 _socket = null;
                 bRun = false;
-                btn.setText("连接");
+              //  btn.setText("连接");
             }catch(IOException e){}
         }
 
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(this, "连接失败，请连接蓝牙模块", Toast.LENGTH_SHORT).show();
                     }
 
-                    Button btn = (Button) findViewById(R.id.Button03);
+                   // Button btn = (Button) findViewById(R.id.Button03);
                     try{
                         _socket.connect();
                         Toast.makeText(this, "连接"+_device.getName()+"成功", Toast.LENGTH_SHORT).show();
