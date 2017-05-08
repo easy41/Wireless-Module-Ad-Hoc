@@ -97,6 +97,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 
             case R.id.home:
                 Intent homeIntent=new Intent(LoginActivity.this,MainActivity.class);
+                //Intent homeIntent=new Intent(LoginActivity.this,GPS.class);
                 startActivity(homeIntent);
                 break;
 

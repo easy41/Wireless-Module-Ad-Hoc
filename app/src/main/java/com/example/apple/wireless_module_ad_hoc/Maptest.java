@@ -30,6 +30,9 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.TextOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class Maptest extends AppCompatActivity implements OnClickListener{
 
@@ -50,7 +53,8 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
 
     LocationManager locationManager;
     String provider;
-
+    CacheUtils cacheUtils;
+    Data getData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +67,7 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
 
-        Data getData = ((Data)getApplicationContext());
+        getData = ((Data)getApplicationContext());
         String name=getData.getName();
         String fromID=getData.getFromID();
 
@@ -87,6 +91,54 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
 
 
     }//onCreate END
+
+    public void getRoadCondition(){
+
+        ArrayList<String> dialogueList=new ArrayList<>();
+        ArrayList<String> list=cacheUtils.readJson(Maptest.this,"road.txt");
+        JSONObject jsonObject;
+        String parseName;
+        String parseID;
+        String parseMessage;
+        String parsedData;
+        Double l,a;
+        String parseType;
+
+        for(String s:list){
+            try{
+                jsonObject=new JSONObject(s);
+                //Log.d(TAG,jsonObject.toString());
+                //parsedData="From: "+jsonObject.get("fromID").toString()+" | To: "+jsonObject.get("toID")+"\n"+jsonObject.get("message");
+                //dialogueList.add(parsedData);
+                parseName=jsonObject.get("name").toString();
+                parseID=jsonObject.get("fromID").toString();
+                parsedData=jsonObject.get("message").toString();
+
+                Log.d(TAG,parsedData);
+                String[] info = parsedData.split("/");
+
+                //|type/longitude/latitude/message/>
+                //Beihang:116.354019,39.987288
+                //Beijiao:116.349447,39.957935
+                //Normal:116.373739,39.96712
+                //hongfu:116.381659,40.114876
+
+                parseType=info[0];
+                Log.d(TAG,info[1]+"|"+info[2]);
+                l=Double.parseDouble(info[1]);
+                a=Double.parseDouble(info[2]);
+                parseMessage=info[3];
+                showLocation(l,a,parseName,parseType,parseMessage);
+
+            }catch (JSONException e){
+                e.getStackTrace();
+            }
+
+        }
+
+    }
+
+
 
 
     void getGPSService() {
@@ -170,7 +222,7 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
             Data latitude_data=((Data)getApplicationContext());
             latitude_data.setLatitude(String.valueOf(myLatitude));
 
-            showLocation(myLongitude, myLatitude, name, group);
+            showLocation(myLongitude, myLatitude, name,"1","myNewLocation");
             Toast.makeText(getApplicationContext(),"位置更新成功",Toast.LENGTH_SHORT).show();
 
 
@@ -190,7 +242,7 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
                 System.out.println("坐标值未更新！");
             }
 
-            showLocation(myLongitude, myLatitude, name, group);
+            showLocation(myLongitude, myLatitude, name, "1","myLocation");
         }
 
     }
@@ -199,9 +251,10 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
 
 
 
-    public void showLocation(Double l,Double a,String rname,String rgroup){
+    public void showLocation(Double l,Double a,String rname,String rgroup,String message){
 
         LatLng point = new LatLng(a, l);
+        String t="";
 
         //定义Maker坐标点
         // LatLng point = new LatLng(39.963175, 116.400244);北邮：39.966912,116.361968
@@ -213,28 +266,42 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
         BitmapDescriptor bitmap;
 
         switch (rgroup) {
+            //myLocation
             case "1": {
                 bitmap = BitmapDescriptorFactory
                         .fromResource(R.drawable.icon_marka);
+                t="You|"+l+"|"+a;
                 break;
             }
 
+            //Rescue station
             case "2": {
                 bitmap = BitmapDescriptorFactory
                         .fromResource(R.drawable.icon_markb);
+                t="Rescue station|"+message;
                 break;
             }
 
+            //people ask for help
             case "3": {
                 bitmap = BitmapDescriptorFactory
                         .fromResource(R.drawable.icon_markc);
+                t="SOS|"+message;
                 break;
             }
 
-            default:
+            //blocked
+            case "4":
                 bitmap = BitmapDescriptorFactory
                         .fromResource(R.drawable.icon_marknull);
+                t="road|"+message;
+                break;
 
+            default:
+                bitmap = BitmapDescriptorFactory
+                        .fromResource(R.drawable.icon_markc);
+                t="null";
+                break;
         }
 
 
@@ -256,7 +323,7 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
                 .bgColor(0xAAFFFF00)
                 .fontSize(24)
                 .fontColor(0xFFFF00FF)
-                .text("G" + rgroup + "/" + rname + "\n" + "longitude:" + l + "\n" + "latitude:" + a)
+                .text(t)
                 .rotate(-0)
                 .position(llText);
 
@@ -284,78 +351,28 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
                 startActivity(intent_h);
                 break;
             case R.id.refresh:
-                Data FakeAddress=((Data)getApplicationContext());
-                String fakeAddress=FakeAddress.getFakeAddress();
+
+                mBaiduMap.clear();
+                try{
+                    cacheUtils.writeJson(Maptest.this,"","road.txt",false);
+                    Toast.makeText(Maptest.this,"The chatting record is cleaned.",Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    e.getStackTrace();
+                }
+
+
+                String fakeAddress=getData.getFakeAddress();
                 Double makefake=Double.parseDouble(fakeAddress);
                 makefake=makefake+0.005;
                 String madefake=Double.toString(makefake);
-                Data fAddress=((Data)getApplicationContext());
-                fAddress.setFakeAddress(madefake);
+                getData.setFakeAddress(madefake);
                 Location location = locationManager.getLastKnownLocation(provider);
                 setLocation(location);
                 Toast.makeText(getApplicationContext(),"refreshed!",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.OK:
-                String rLatitude = "";
-                String rLongitude = "";
-                String smsg1 = smsg;
-                String rname = "";
-                String rgroup = "";
-
-                //String smsg1="$2nino#39&116*";
-                Log.d(TAG,"接收到的坐标值为："+smsg1);
-                char a;
-                int i, j, k;
-
-				/*
-					Setting the string format to be: “$+groupnum+name+#+latitude+&+longitude+*”
-				 */
-
-                char b = smsg1.charAt(0);//Check whether the smsg is a location message or not.
-                //If it is, just decode it into split Data.
-                if (b == '$') {
-                    rgroup = rgroup + smsg1.charAt(1);
-                    for (k = 2; k < smsg1.length(); k++) {
-                        a = smsg1.charAt(k);
-                        if (a != '#') {
-                            rname = rname + a;
-                        } else {
-                            k++;
-                            break;
-                        }
-                    }
-
-                    for (i = k; i < smsg1.length(); i++) {
-
-                        a = smsg1.charAt(i);
-                        if (a != '&') {
-                            rLatitude = rLatitude + a;
-                        } else {
-                            i++;
-                            break;
-                        }
-                    }
-
-                    for (j = i; j < smsg1.length(); j++) {
-
-                        a = smsg1.charAt(j);
-                        if (a != '*') {
-                            rLongitude = rLongitude + a;
-                        } else {
-                            break;
-                        }
-                    }
-                }
-
-                Log.d(TAG,"latitude: " + rLatitude+"  longitude: " + rLongitude+"  name: "
-                        + rname+"  group: " + rgroup);
-
-                double longitude = Double.parseDouble(rLongitude);
-                double latitude = Double.parseDouble(rLatitude);
-
-                showLocation(longitude, latitude, rname, rgroup);
-                smsg="";
-
+                //mBaiduMap.clear();
+                getRoadCondition();
                 break;
             case R.id.send:
                 //locationSend = "$" + group + name + "#" + myLatitude + "&" + myLongitude + "*";
@@ -415,6 +432,67 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
         mMapView.onPause();
     }
 
+    /*public void ok(){
+        String rLatitude = "";
+        String rLongitude = "";
+        String smsg1 = smsg;
+        String rname = "";
+        String rgroup = "";
+
+        //String smsg1="$2nino#39&116*";
+        Log.d(TAG,"接收到的坐标值为："+smsg1);
+        char a;
+        int i, j, k;
+
+				*//*
+					Setting the string format to be: “$+groupnum+name+#+latitude+&+longitude+*”
+				 *//*
+
+        char b = smsg1.charAt(0);//Check whether the smsg is a location message or not.
+        //If it is, just decode it into split Data.
+        if (b == '$') {
+            rgroup = rgroup + smsg1.charAt(1);
+            for (k = 2; k < smsg1.length(); k++) {
+                a = smsg1.charAt(k);
+                if (a != '#') {
+                    rname = rname + a;
+                } else {
+                    k++;
+                    break;
+                }
+            }
+
+            for (i = k; i < smsg1.length(); i++) {
+
+                a = smsg1.charAt(i);
+                if (a != '&') {
+                    rLatitude = rLatitude + a;
+                } else {
+                    i++;
+                    break;
+                }
+            }
+
+            for (j = i; j < smsg1.length(); j++) {
+
+                a = smsg1.charAt(j);
+                if (a != '*') {
+                    rLongitude = rLongitude + a;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        Log.d(TAG,"latitude: " + rLatitude+"  longitude: " + rLongitude+"  name: "
+                + rname+"  group: " + rgroup);
+
+        double longitude = Double.parseDouble(rLongitude);
+        double latitude = Double.parseDouble(rLatitude);
+
+        showLocation(longitude, latitude, rname, rgroup);
+        smsg="";
+    }*/
 
 
 }

@@ -172,6 +172,7 @@ public class SendMessage {
 
                     //waiting for response... /5s
                     //Toast.makeText(context,"Failed to reach to the destination.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Unsent",Toast.LENGTH_SHORT).show();
                     Log.d(TAG,"Failed to reach to the destination.");
                     break;
                 }else{
@@ -180,7 +181,7 @@ public class SendMessage {
 
             }
             if(ackFlag==1){
-                Log.d(TAG,"sent");
+                Log.d(TAG,"Sent");
             }
 
 

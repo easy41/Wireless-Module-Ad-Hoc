@@ -13,9 +13,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by Easy_MAI on 2017/5/8.
- */
 
 public class RescueInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
