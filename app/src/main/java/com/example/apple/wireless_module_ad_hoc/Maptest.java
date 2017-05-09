@@ -335,7 +335,7 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
                 mBaiduMap.clear();
                 try{
                     cacheUtils.writeJson(Maptest.this,"","road.txt",false);
-                    Toast.makeText(Maptest.this,"The map record is cleaned.",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Maptest.this,"The map record is cleaned.",Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
                     e.getStackTrace();
                 }
@@ -410,6 +410,7 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
 
             route = myID + "/";
             sendMessage.sendFormatMessage(RESCUE_INFORMATION, broadcastCount,myName, myID, "0000", route, m);
+            Toast.makeText(Maptest.this,"Help message sent",Toast.LENGTH_SHORT).show();
 
         }catch (Exception e){
             //Toast.makeText(LoginActivity.this,"Please connect to the bluetooth module first.",Toast.LENGTH_SHORT).show();
@@ -441,6 +442,7 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
             SendMessage sendMessage=new SendMessage(getApplicationContext());
             String route=myID+"/";
             sendMessage.sendFormatMessage(ROAD_CONDITION,"0",myName,myID,"0000",route,s);
+            condition.setText("");
         }
 
     }
@@ -499,7 +501,8 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
                             MKOLUpdateElement update = mkOfflineMap.getUpdateInfo(state);
                             // 处理下载进度更新提示,与百度地图官方的app有冲突
                             if (update != null) {
-                                //stateView.setText(update.cityName+": "+update.ratio);
+                                //stateView.setText("Downloading offline map of "+update.cityName+": "+update.ratio);
+                                stateView.setText("Downloading offline map of Beijing: "+update.ratio+"%");
                                 Log.d(TAG,update.cityName+": "+update.ratio);
                                 //updateView();
                             }
@@ -508,6 +511,14 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
                         case MKOfflineMap.TYPE_NEW_OFFLINE:
                             // 有新离线地图安装
                             Log.d("OfflineDemo", String.format("add offlinemap num:%d", state));
+                            int cityID=131;//Beijing
+                            try{
+                                mkOfflineMap.start(cityID);
+                                Log.d(TAG,"Start to download the offline map of Beijing.");
+                                Toast.makeText(Maptest.this, "Start to download the offline map of Beijing.", Toast.LENGTH_SHORT).show();
+                            }catch (Exception e){
+                                Toast.makeText(Maptest.this,"Please check your network connection.",Toast.LENGTH_SHORT).show();
+                            }
                             break;
                         case MKOfflineMap.TYPE_VER_UPDATE:
                             // 版本更新提示
@@ -523,10 +534,13 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
             Boolean initial=mkOfflineMap.init(listener);
             if(initial){
                 int cityID=131;//Beijing
-                mkOfflineMap.start(cityID);
-                Log.d(TAG,"Start to download the offline map.");
-                Toast.makeText(this, "Start to download the offline map.", Toast.LENGTH_SHORT).show();
-                //stateThread.start();
+                try{
+                    mkOfflineMap.start(cityID);
+                    Log.d(TAG,"Start to download the offline map of Beijing.");
+                   // Toast.makeText(this, "Start to download the offline map of Beijing.", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    Toast.makeText(this,"Please check your network connection.",Toast.LENGTH_SHORT).show();
+                }
 
             }
 
@@ -560,16 +574,6 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
 
     }*/
 
-    Thread stateThread=new Thread() {
-
-        public void run() {
-
-
-        }
-
-    };
-
-
 
 
     public boolean isWifiConnected(Context context)
@@ -578,7 +582,7 @@ public class Maptest extends AppCompatActivity implements OnClickListener{
         NetworkInfo wifiNetworkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         if(wifiNetworkInfo.isConnected())
         {
-            Toast.makeText(context,"WiFi connected",Toast.LENGTH_SHORT).show();
+           // Toast.makeText(context,"WiFi connected",Toast.LENGTH_SHORT).show();
             return true ;
         }
         Toast.makeText(context,"WiFi disconnected",Toast.LENGTH_SHORT).show();

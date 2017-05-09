@@ -25,16 +25,30 @@ public class SendMessage {
     private final static String Acknowledgement="5";
 
     private BluetoothSocket _socket = null;
-    Context context;
+    Context applicationContext;
+    Context acitivityContext;
     String TAG="SendMessage";
 
     Data getData;
     String fileName="json.txt";
+    JSONObject jsonObject;
+    String name;
+    String type;
+    String message;
+    String toID;
+    String fromID;
+    CacheUtils cacheUtils;
 
 
-    public SendMessage(Context context){
+    public SendMessage(Context applicationContext){
         //call by: getApplicationContext();
-        this.context=context;
+        this.applicationContext =applicationContext;
+    }
+
+    public SendMessage(Context applicationContext,Context activityContext){
+        this.applicationContext=applicationContext;
+        this.acitivityContext=activityContext;
+
     }
 
 
@@ -42,11 +56,16 @@ public class SendMessage {
         int i;
         int n=0;
         String sendingMessage;
-        getData = ((Data)context);
-        JSONObject jsonObject=new JSONObject();
+        getData = ((Data) applicationContext);
+        jsonObject=new JSONObject();
+        this.name=name;
+        this.type=type;
+        this.message=message;
+        this.toID=toID;
+        this.fromID=fromID;
 
 
-        /*getData = ((Data)context);
+        /*getData = ((Data)applicationContext);
         String name=getData.getName();
         String fromID=getData.getFromID();
         Log.d(TAG,"Get data: "+name+"/"+fromID);*/
@@ -60,12 +79,12 @@ public class SendMessage {
           *     4.Road condition broadcasting information
          */
 
-        CacheUtils cacheUtils=new CacheUtils();
+        cacheUtils=new CacheUtils();
         switch (type){
             case ROUTE_DISCOVERY:
                 //Log.d(TAG,"Start route discovery.");
                 sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message+"/>";
-                try{
+                /*try{
                     jsonObject.put("message",message);
                     jsonObject.put("toID",toID);
                     jsonObject.put("fromID",fromID);
@@ -76,7 +95,7 @@ public class SendMessage {
                 }catch (JSONException e){
                     Log.d(TAG,"Failed to set JSON.");
                 }
-                cacheUtils.writeJson(context,jsonObject.toString(),"dialogue.txt",true);
+                cacheUtils.writeJson(applicationContext,jsonObject.toString(),"dialogue.txt",true);*/
                 break;
 
             case Acknowledgement:
@@ -87,7 +106,7 @@ public class SendMessage {
             case DIALOGUE:
                 //Log.d(TAG,"Start send dialogue.");
                 sendingMessage=type+"|"+broadcastCount+"|"+name+"|"+fromID+"|"+toID+"|"+route+"|"+message+"/>";
-                if(broadcastCount.equals("0")){
+                /*if(broadcastCount.equals("0")){
                     try{
                         jsonObject.put("message",message);
                         jsonObject.put("toID",toID);
@@ -99,8 +118,8 @@ public class SendMessage {
                     }catch (JSONException e){
                         Log.d(TAG,"Failed to set JSON.");
                     }
-                    cacheUtils.writeJson(context,jsonObject.toString(),"dialogue.txt",true);
-                }
+                    cacheUtils.writeJson(applicationContext,jsonObject.toString(),"dialogue.txt",true);
+                }*/
                 break;
 
             case RESCUE_INFORMATION:
@@ -118,7 +137,7 @@ public class SendMessage {
                     }catch (JSONException e){
                         Log.d(TAG,"Failed to set JSON.");
                     }
-                    cacheUtils.writeJson(context,jsonObject.toString(),"rescue_info.txt",true);
+                    cacheUtils.writeJson(applicationContext,jsonObject.toString(),"rescue_info.txt",true);
                 }
                 break;
 
@@ -128,7 +147,7 @@ public class SendMessage {
                 break;
 
             default:
-                //Toast.makeText(context,"The data format is invalid.",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(applicationContext,"The data format is invalid.",Toast.LENGTH_SHORT).show();
                 Log.d(TAG,"The data format is invalid");
                 return;
 
@@ -185,13 +204,13 @@ public class SendMessage {
             while(ackFlag==0){
                 t2 = System.currentTimeMillis();
                 //Log.d(TAG,"Ack Thread running...");
-                if(t2-t1 > 3*1000){//1ms
+                if(t2-t1 > 5*1000){//1ms
 
                     //TODO: simulation to calculate the waiting time.
 
                     //waiting for response... /5s
-                    //Toast.makeText(context,"Failed to reach to the destination.",Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(,"Unsent",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(applicationContext,"Failed to reach to the destination.",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(acitivityContext,"Unsent",Toast.LENGTH_SHORT).show();
                     Log.d(TAG,"Failed to reach to the destination.");
                     break;
                 }else{
@@ -201,6 +220,20 @@ public class SendMessage {
             }
             if(ackFlag==1){
                 Log.d(TAG,"Sent");
+                //Toast.makeText(acitivityContext,"Sent",Toast.LENGTH_SHORT).show();
+                JSONObject jsonObject=new JSONObject();
+                try{
+                    jsonObject.put("message",message);
+                    jsonObject.put("toID",toID);
+                    jsonObject.put("fromID",fromID);
+                    jsonObject.put("name",name);
+                    // jsonObject.put("broadcastCount",broadcastCount);
+                    jsonObject.put("type",type);
+
+                }catch (JSONException e){
+                    Log.d(TAG,"Failed to set JSON.");
+                }
+                cacheUtils.writeJson(applicationContext,jsonObject.toString(),"dialogue.txt",true);
             }
 
 

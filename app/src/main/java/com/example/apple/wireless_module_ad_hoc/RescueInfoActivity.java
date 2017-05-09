@@ -67,7 +67,7 @@ public class RescueInfoActivity extends AppCompatActivity implements View.OnClic
             try{
                 jsonObject=new JSONObject(s);
                // Log.d(TAG,jsonObject.toString());
-                parsedData="From: "+jsonObject.get("fromID").toString()+"\n"+jsonObject.get("message");
+                parsedData="From: "+jsonObject.get("name").toString()+"\n"+jsonObject.get("message");
                 dialogueList.add(parsedData);
             }catch (JSONException e){
                 e.getStackTrace();
@@ -104,6 +104,7 @@ public class RescueInfoActivity extends AppCompatActivity implements View.OnClic
                     break;
                 }
                 sendMessage.sendFormatMessage(RESCUE_INFORMATION,"0",myName,myID,"0000",route,messeage);
+                editText.setText("");
                 break;
             default:
                 break;

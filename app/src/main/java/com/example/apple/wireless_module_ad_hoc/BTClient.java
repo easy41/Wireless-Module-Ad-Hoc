@@ -128,7 +128,7 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 			try{
 				jsonObject=new JSONObject(s);
 				//Log.d(TAG,jsonObject.toString());
-				parsedData="From: "+jsonObject.get("fromID").toString()+" | To: "+jsonObject.get("toID")+"\n"+jsonObject.get("message");
+				parsedData="From: "+jsonObject.get("name").toString()+" | To: "+jsonObject.get("toID")+"\n"+jsonObject.get("message");
 				dialogueList.add(parsedData);
 			}catch (JSONException e){
 				e.getStackTrace();
@@ -214,7 +214,7 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 		String fromID=getData.getFromID();
 		Log.d(TAG,"Get data: "+name+"/"+fromID);
 
-		SendMessage sendMessage=new SendMessage(getApplicationContext());
+		SendMessage sendMessage=new SendMessage(getApplicationContext(),BTClient.this);
 
 		//Check the stored routing table.
 		if(!getData.getRoute().equals("0000")){
@@ -227,11 +227,13 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 			}else {
 				route=getData.getFromID()+"/";
 				sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,message);
+				edit0.setText("");
 			}
 		}
 		else {
 			route=getData.getFromID()+"/";
 			sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,message);
+			edit0.setText("");
 		}
 
 		//sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,route,"Hello!");

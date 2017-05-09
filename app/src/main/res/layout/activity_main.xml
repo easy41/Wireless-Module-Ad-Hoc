@@ -50,7 +50,7 @@
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="ID(number only)"
+            android:hint="ID(Your mobile phone number)"
             android:imeActionId="@+id/login"
             android:imeActionLabel="@string/action_sign_in_short"
             android:imeOptions="actionUnspecified"
