@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
          */
 
         if(_bluetooth.isEnabled()==false){
-            Toast.makeText(MainActivity.this, " 打开蓝牙中...", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Starting Bluetooth Service...", Toast.LENGTH_LONG).show();
             return;
         }
 

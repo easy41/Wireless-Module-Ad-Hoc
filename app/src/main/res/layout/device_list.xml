@@ -12,7 +12,7 @@
         android:layout_weight="1"
         android:background="#666"
         android:paddingLeft="5dp"
-        android:text="未配对设备"
+        android:text="Unpaired devices"
         android:textColor="#fff"
         android:visibility="gone" />
 <LinearLayout
@@ -39,12 +39,13 @@
         android:stackFromBottom="true" >
     </ListView>
 </LinearLayout>
+
     <Button
         android:id="@+id/button_scan"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="查找设备" />
+        android:text="Scan" />
 
     <Button
         android:id="@+id/button_cancel"
@@ -52,6 +53,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:onClick="OnCancel"
-        android:text="取消" />
+        android:text="Cancel" />
 
 </LinearLayout>

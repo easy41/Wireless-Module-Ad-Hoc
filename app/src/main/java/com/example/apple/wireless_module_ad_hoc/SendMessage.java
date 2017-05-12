@@ -206,12 +206,13 @@ public class SendMessage {
                 //Log.d(TAG,"Ack Thread running...");
                 if(t2-t1 > 5*1000){//1ms
 
-                    //TODO: simulation to calculate the waiting time.
-
                     //waiting for response... /5s
                     //Toast.makeText(applicationContext,"Failed to reach to the destination.",Toast.LENGTH_SHORT).show();
                     //Toast.makeText(acitivityContext,"Unsent",Toast.LENGTH_SHORT).show();
                     Log.d(TAG,"Failed to reach to the destination.");
+                    // Start route discovery again
+                    getData.setRoute("0000");
+
                     break;
                 }else{
                     ackFlag=getData.getAckFlag();

@@ -53,7 +53,7 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 	boolean _discoveryFinished = false;
 	boolean bRun = true;
 	boolean bThread = false;
-	String TAG="蓝牙：";
+	String TAG="BTClient：";
 
 	private BluetoothAdapter _bluetooth = BluetoothAdapter.getDefaultAdapter();
 

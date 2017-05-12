@@ -42,8 +42,8 @@ public class DeviceListActivity extends Activity {
     private static final boolean D = true;
 
 
-    public static String EXTRA_DEVICE_ADDRESS = "设备地址：";
-
+    //public static String EXTRA_DEVICE_ADDRESS = "设备地址：";
+    public static String EXTRA_DEVICE_ADDRESS = "Device address：";
 
     private BluetoothAdapter mBtAdapter;
     private ArrayAdapter<String> mPairedDevicesArrayAdapter;
@@ -119,7 +119,8 @@ public class DeviceListActivity extends Activity {
 
 
         setProgressBarIndeterminateVisibility(true);
-        setTitle("查找设备...");
+        //setTitle("查找设备...");
+        setTitle("Scanning...");
 
 
         findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
@@ -170,9 +171,11 @@ public class DeviceListActivity extends Activity {
 
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 setProgressBarIndeterminateVisibility(false);
-                setTitle("查找结果：");
+                //setTitle("查找结果：");
+                setTitle("Scanning Result：");
                 if (mNewDevicesArrayAdapter.getCount() == 0) {
-                    String noDevices = "没有发现蓝牙设备";
+                    //String noDevices = "没有发现蓝牙设备";
+                    String noDevices = "Not found";
                     mNewDevicesArrayAdapter.add(noDevices);
                 }
              //   if(mPairedDevicesArrayAdapter.getCount() > 0)

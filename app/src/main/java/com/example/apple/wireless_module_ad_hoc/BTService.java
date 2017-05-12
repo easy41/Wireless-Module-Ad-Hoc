@@ -71,7 +71,8 @@ public class BTService extends Service {
         try{
             is = _socket.getInputStream();
         }catch(IOException e){
-            Toast.makeText(this, "接收数据失败", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "接收数据失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to receive the data.", Toast.LENGTH_SHORT).show();
             return;
         }
         if(!bThread){
@@ -248,7 +249,6 @@ public class BTService extends Service {
 
         if(_socket!=null)
             try{
-
                 _socket.close();
             }catch(IOException e){
                 Log.d(TAG,"Failed to close the socket.");
