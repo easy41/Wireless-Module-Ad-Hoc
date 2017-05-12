@@ -75,6 +75,7 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 	Button cleanButton;
 	Button refreshButton;
 	Button rescueButton;
+	Button test;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -101,10 +102,12 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 		cleanButton=(Button)findViewById(R.id.clean);
 		refreshButton=(Button)findViewById(R.id.refresh_dialogue);
 		rescueButton=(Button)findViewById(R.id.rescue_info);
+		test=(Button)findViewById(R.id.chat_test);
 		sendButton.setOnClickListener(this);
 		cleanButton.setOnClickListener(this);
 		refreshButton.setOnClickListener(this);
 		rescueButton.setOnClickListener(this);
+		test.setOnClickListener(this);
 
 		/*
 			ListView
@@ -159,6 +162,9 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 		switch (v.getId()) {
 
 			case R.id.send:
+				/*//for test:
+				getData.setCounter(1);*/
+
 				send();
 				break;
 
@@ -179,6 +185,10 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 				Intent rescueIntent=new Intent(BTClient.this,RescueInfoActivity.class);
 				startActivity(rescueIntent);
 				break;
+
+			case R.id.chat_test:
+				//test();
+				//getData.setCounter(0);
 
 			default:
 				break;
@@ -214,7 +224,7 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 		String fromID=getData.getFromID();
 		Log.d(TAG,"Get data: "+name+"/"+fromID);
 
-		SendMessage sendMessage=new SendMessage(getApplicationContext(),BTClient.this);
+		SendMessage sendMessage=new SendMessage(getApplicationContext());
 
 		//Check the stored routing table.
 		if(!getData.getRoute().equals("0000")){
@@ -246,6 +256,72 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 		}*/
 
 	}
+
+	/*public void test(){
+
+		String broadCastCount="0";
+		toID="18833333333";
+		//message="1";
+		String name=getData.getName();
+		String fromID=getData.getFromID();
+		Log.d(TAG,"Get data: "+name+"/"+fromID);
+		SendMessage sendMessage=new SendMessage(getApplicationContext());
+		String route;
+
+		int i;
+		int j=1;
+		String m;
+		long t1,t2;
+		int num=10;
+		t1 = System.currentTimeMillis();
+		for(i=0;i<num;i++){
+			m=Integer.toString(j);
+
+			//Check the stored routing table.
+			if(!getData.getRoute().equals("0000")){
+				String[] s=getData.getRoute().split("/");
+				String storeDest=s[s.length-1];
+				if(storeDest.equals(toID)){
+					route=getData.getRoute();
+					Log.d(TAG,"Get stored route: "+route);
+					sendMessage.sendFormatMessage(DIALOGUE,broadCastCount,name,fromID,toID,route,m);
+				}else {
+					route=getData.getFromID()+"/";
+					sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,m);
+					edit0.setText("");
+				}
+			}
+			else {
+				route=getData.getFromID()+"/";
+				sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,m);
+				edit0.setText("");
+			}
+			j++;
+			while(true){
+
+
+				t2 = System.currentTimeMillis();
+				if(getData.getAckFlag()==-1){//1ms
+					getData.setAckFlag(0);
+					Log.d(TAG,"Test time out.");
+
+					break;
+				}else if(getData.getAckFlag()==1){
+					getData.setAckFlag(0);
+					Log.d(TAG,"Test get ACK");
+
+					break;
+				}
+
+
+			}
+
+		}
+		t2 = System.currentTimeMillis();
+		long time=t2-t1;
+		Log.d(TAG,"The total time of sending "+num+" messages and receiving ACK is: "+time);
+
+	}*/
 
 
 /*

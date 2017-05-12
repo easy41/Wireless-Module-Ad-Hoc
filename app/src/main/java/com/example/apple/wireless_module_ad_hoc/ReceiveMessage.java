@@ -44,10 +44,10 @@ public class ReceiveMessage {
     }
 
     public void receiveMessageHandler(String receiveInfo){
-        Log.d(TAG,"Entering receiveMessageHandler.");
+       // Log.d(TAG,"Entering receiveMessageHandler.");
         String name=getData.getName();
         String fromID=getData.getFromID();
-        Log.d(TAG,"Get data: "+name+"/"+fromID);
+       // Log.d(TAG,"Get data: "+name+"/"+fromID);
 
         SendMessage sendMessage=new SendMessage(context);
         String myID=getData.getFromID();
@@ -98,7 +98,7 @@ public class ReceiveMessage {
             case ROUTE_DISCOVERY:
                 //  myID=destination
                 if(toID.equals(myID)){
-                    Log.d(TAG,"I'm the destination.");
+                   // Log.d(TAG,"I'm the destination.");
 
                     //display the message to the user here.
                     try{
@@ -142,8 +142,10 @@ public class ReceiveMessage {
                 //toID=myID
                 if(toID.equals(myID)){
                     getData.setRoute(route);
+                   // Log.d(TAG,"The new route is: "+route);
+
                     getData.setAckFlag(1);
-                    Log.d(TAG,"The new route is: "+getData.getRoute());
+                    //Log.d(TAG,"The new route is: "+getData.getRoute());
                 }
                 else{
                     String[] s=route.split("/");

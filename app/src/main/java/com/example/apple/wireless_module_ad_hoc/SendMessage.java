@@ -38,17 +38,15 @@ public class SendMessage {
     String toID;
     String fromID;
     CacheUtils cacheUtils;
+    Double start,end;
+    int unsentCount=0;
+    int testNUm=1000;
 
 
     public SendMessage(Context applicationContext){
         //call by: getApplicationContext();
         this.applicationContext =applicationContext;
-    }
-
-    public SendMessage(Context applicationContext,Context activityContext){
-        this.applicationContext=applicationContext;
-        this.acitivityContext=activityContext;
-
+        start=(double)System.currentTimeMillis();
     }
 
 
@@ -180,6 +178,8 @@ public class SendMessage {
             //It is unnecessary to get ack when relaying the massages.
             if(bCount==0){
                 if(type.equals(ROUTE_DISCOVERY)||type.equals(DIALOGUE)){
+                    //getAckThread.start();
+                    GetAckThread getAckThread=new GetAckThread();
                     getAckThread.start();
                 }
 
@@ -194,7 +194,92 @@ public class SendMessage {
         }
     }
 
-    private Thread getAckThread = new Thread(){
+
+    private class GetAckThread extends Thread{
+        @Override
+        public void run(){
+            super.run();
+
+            doTask();
+
+        }
+    }
+
+    public void doTask(){
+        int ackFlag=0;
+        long t2;
+        getData.setAckFlag(ackFlag);
+        long t1 = System.currentTimeMillis();
+
+        while(ackFlag==0){
+            t2 = System.currentTimeMillis();
+            //Log.d(TAG,"Ack Thread running...");
+            if(t2-t1 > 5*1000){//1ms
+
+                //waiting for response... /5s
+                Log.e(TAG,"Failed to reach to the destination.");
+                // Start route discovery again
+               // getData.setRoute("0000");
+                getData.setAckFlag(-1);
+                //for test:
+                /*unsentCount++;
+                test();*/
+
+
+                break;
+            }else{
+                ackFlag=getData.getAckFlag();
+                if(ackFlag==1){
+                    Log.d(TAG,"Sent");
+                    //Toast.makeText(acitivityContext,"Sent",Toast.LENGTH_SHORT).show();
+                    JSONObject jsonObject=new JSONObject();
+                    try{
+                        jsonObject.put("message",message);
+                        jsonObject.put("toID",toID);
+                        jsonObject.put("fromID",fromID);
+                        jsonObject.put("name",name);
+                        // jsonObject.put("broadcastCount",broadcastCount);
+                        jsonObject.put("type",type);
+
+                    }catch (JSONException e){
+                        Log.d(TAG,"Failed to set JSON.");
+                    }
+                    cacheUtils.writeJson(applicationContext,jsonObject.toString(),"dialogue.txt",true);
+
+                    //for test:
+                    //test();
+
+                    break;
+                }
+
+            }
+
+        }
+    }
+
+    public void test(){
+
+        int newCounter=getData.getCounter()+1;
+        String me=Integer.toString(newCounter);
+        if(newCounter<=testNUm){
+            getData.setCounter(newCounter);
+            String route=getData.getRoute();
+            sendFormatMessage(DIALOGUE,"0","Nino","18811111111","18833333333",route,me);
+        }else{
+            end=(double)System.currentTimeMillis();
+            Double time=end-start;
+            Double ave=time/testNUm;
+            float u=(float)unsentCount;
+            float t=(float)testNUm;
+            float loss=u/t;
+            Log.e(TAG,"The total sending time is: "+time);
+            Log.e(TAG,"The average sending time is: "+ave);
+            Log.e(TAG,"The number of messages that fail to reach to the destination is: "+unsentCount);
+            Log.e(TAG,"The package loss rate is: "+loss);
+        }
+    }
+
+    /*public Thread getAckThread = new Thread(){
         public void run(){
             int ackFlag=0;
             long t2;
@@ -212,35 +297,39 @@ public class SendMessage {
                     Log.d(TAG,"Failed to reach to the destination.");
                     // Start route discovery again
                     getData.setRoute("0000");
+                    getData.setAckFlag(-1);
 
                     break;
                 }else{
                     ackFlag=getData.getAckFlag();
+                    if(ackFlag==1){
+                        Log.d(TAG,"Sent");
+                        //Toast.makeText(acitivityContext,"Sent",Toast.LENGTH_SHORT).show();
+                        JSONObject jsonObject=new JSONObject();
+                        try{
+                            jsonObject.put("message",message);
+                            jsonObject.put("toID",toID);
+                            jsonObject.put("fromID",fromID);
+                            jsonObject.put("name",name);
+                            // jsonObject.put("broadcastCount",broadcastCount);
+                            jsonObject.put("type",type);
+
+                        }catch (JSONException e){
+                            Log.d(TAG,"Failed to set JSON.");
+                        }
+                        cacheUtils.writeJson(applicationContext,jsonObject.toString(),"dialogue.txt",true);
+                        break;
+                    }
+
                 }
 
             }
-            if(ackFlag==1){
-                Log.d(TAG,"Sent");
-                //Toast.makeText(acitivityContext,"Sent",Toast.LENGTH_SHORT).show();
-                JSONObject jsonObject=new JSONObject();
-                try{
-                    jsonObject.put("message",message);
-                    jsonObject.put("toID",toID);
-                    jsonObject.put("fromID",fromID);
-                    jsonObject.put("name",name);
-                    // jsonObject.put("broadcastCount",broadcastCount);
-                    jsonObject.put("type",type);
 
-                }catch (JSONException e){
-                    Log.d(TAG,"Failed to set JSON.");
-                }
-                cacheUtils.writeJson(applicationContext,jsonObject.toString(),"dialogue.txt",true);
-            }
 
 
         }
 
-    };
+    };*/
 
 
 }

@@ -111,7 +111,7 @@ public class BTService extends Service {
                     }
                     while(true){
                         num = is.read(buffer);
-                        Log.d(TAG,"Reading...");
+                       // Log.d(TAG,"Reading...");
                         n=0;
 
                         String s0 = new String(buffer,0,num);
@@ -161,10 +161,10 @@ public class BTService extends Service {
             }*/
 
             if(smsg.length()>2){
-                Log.d(TAG,"The length is right.");
+               // Log.d(TAG,"The length is right.");
                 if (smsg.substring((smsg.length()-2),smsg.length()).equals("/>")){
                     String[] s=smsg.split("/>");
-                    Log.d(TAG,"The length is: "+s.length);
+                   // Log.d(TAG,"The length is: "+s.length);
 
                     smsg=s[s.length-1];
                     Log.d(TAG,"Handler receive: "+smsg);
@@ -181,40 +181,6 @@ public class BTService extends Service {
                // Log.d(TAG,"Invalid ignore.1");
             }
 
-
-            //Log.d(TAG,"Handler receive: "+smsg);
-            /*if(smsg.charAt(0)=='t'){1
-                dis.setText(smsg.substring(1));
-
-
-            }*/
-
-            /*Log.d(TAG,smsg);
-            switch (smsg.charAt(0)){
-                case 'T':
-                    Data messages = ((Data)getApplicationContext());
-                    messages.setMessages(smsg);
-                    smsg=null;
-                    break;
-                case 'I':
-
-                    smsg=null;
-                    break;
-                case 'R':
-                    Data rescue = ((Data)getApplicationContext());
-                    //rescue.setRescueTeam(smsg);//处理rescue信息
-                    smsg=null;
-                    break;
-                case 'S':
-                    Data condition = ((Data)getApplicationContext());
-                    condition.setMessages(smsg);
-                    smsg=null;
-                    break;
-                default:
-                    smsg=null;
-                    break;
-            }*/
-            //sv.scrollTo(0, dis.getMeasuredHeight());
 
         }
     };
