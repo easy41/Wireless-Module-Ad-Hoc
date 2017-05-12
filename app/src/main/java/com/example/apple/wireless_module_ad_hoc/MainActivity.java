@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         getData.setRoute("0000");
         getData.setFromID("FFFF");
         getData.setName("FFFF");
+        getData.setMessageType(0);
         Log.d(TAG,"Finished setting values.");
 
         home.setOnClickListener(new View.OnClickListener() {

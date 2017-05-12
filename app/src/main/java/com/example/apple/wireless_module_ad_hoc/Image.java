@@ -13,14 +13,29 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.ImageView;
 
 
 public class Image extends Activity{
+
+    String TAG="ImageActivity";
+    private final static String IMAGE="6";
+    Data getData;
+    String myName,myID;
+    //ImageView imageView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       // setContentView(R.layout.activity_image);
         setContentView(R.layout.activity_btclient);
         Log.v("tag","message");
+
+        //imageView=(ImageView)findViewById(R.id.imgview);
+
+        getData=((Data)getApplicationContext());
+        myID=getData.getFromID();
+        myName=getData.getName();
 
         Intent intent = new Intent();
 
@@ -44,9 +59,15 @@ public class Image extends Activity{
                 Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
 
                 String a= bitmap2String(bitmap);
+                Log.d(TAG,"The pic string is: "+a);
 //                String a = "test";
                 Intent i = new Intent();
-                i.putExtra("Data", a);
+                String b="";
+                i.putExtra("Data",b);
+                Log.d(TAG,"The a is: "+a);
+                SendMessage sendMessage=new SendMessage(getApplicationContext());
+                sendMessage.sendFormatMessage(IMAGE,"0",myName,myID,"0","0",a);
+
                 setResult(1,i);
                 finish();
 

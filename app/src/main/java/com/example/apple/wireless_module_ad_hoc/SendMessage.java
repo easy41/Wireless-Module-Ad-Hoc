@@ -23,6 +23,7 @@ public class SendMessage {
     private final static String RESCUE_INFORMATION ="3";
     private final static String ROAD_CONDITION ="4";
     private final static String Acknowledgement="5";
+    private final static String IMAGE="6";
 
     private BluetoothSocket _socket = null;
     Context applicationContext;
@@ -142,6 +143,10 @@ public class SendMessage {
             case ROAD_CONDITION:
                 sendingMessage=type+'|'+broadcastCount+'|'+name+'|'+fromID+'|'+route+'|'+message+"/>";
                 //Broadcasting the message.
+                break;
+
+            case IMAGE:
+                sendingMessage=type+'|'+broadcastCount+'|'+name+'|'+fromID+'|'+route+'|'+message+"/>";
                 break;
 
             default:

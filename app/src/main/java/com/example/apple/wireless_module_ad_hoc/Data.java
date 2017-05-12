@@ -2,6 +2,7 @@ package com.example.apple.wireless_module_ad_hoc;
 
 import android.app.Application;
 import android.bluetooth.BluetoothSocket;
+import android.graphics.Bitmap;
 
 import org.json.JSONObject;
 
@@ -141,6 +142,26 @@ public class Data extends Application {
     public String getrLongitude(){
         return rLongitude;
     }
+
+    /*
+        Image
+     */
+    private Bitmap image;
+    public void setImage(Bitmap image){
+        this.image=image;
+    }
+    public Bitmap getImage(){
+        return image;
+    }
+
+    private int messageType;
+    public void setMessageType(int messageType){
+        this.messageType=messageType;
+    }
+    public int getMessageType(){
+        return messageType;
+    }
+
 
     /*
         Test

@@ -75,7 +75,7 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 	Button cleanButton;
 	Button refreshButton;
 	Button rescueButton;
-	Button test;
+	Button imgButton;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -102,12 +102,12 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 		cleanButton=(Button)findViewById(R.id.clean);
 		refreshButton=(Button)findViewById(R.id.refresh_dialogue);
 		rescueButton=(Button)findViewById(R.id.rescue_info);
-		test=(Button)findViewById(R.id.chat_test);
+		imgButton=(Button)findViewById(R.id.img);
 		sendButton.setOnClickListener(this);
 		cleanButton.setOnClickListener(this);
 		refreshButton.setOnClickListener(this);
 		rescueButton.setOnClickListener(this);
-		test.setOnClickListener(this);
+		imgButton.setOnClickListener(this);
 
 		/*
 			ListView
@@ -178,7 +178,19 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 				break;
 
 			case R.id.refresh_dialogue:
-				getDialogueList();
+				if(getData.getMessageType()==1){
+					//Log.d(TAG,"Show image.");
+					//Show image
+					bm=getData.getImage();
+					iv.setImageBitmap(bm);
+
+					getData.setMessageType(0);
+					Log.d(TAG,"Show image.");
+
+				}else {
+					getDialogueList();
+				}
+
 				break;
 
 			case R.id.rescue_info:
@@ -186,9 +198,14 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 				startActivity(rescueIntent);
 				break;
 
-			case R.id.chat_test:
-				//test();
-				//getData.setCounter(0);
+			case R.id.img:
+
+				/*Intent imgIntent = new Intent(BTClient.this, Image.class);
+				startActivity(imgIntent);*/
+				Intent intent=new Intent();
+				intent.setClass(BTClient.this, Image.class);
+				startActivityForResult(intent, REQUEST_INVOKE_IMAGE);
+
 
 			default:
 				break;
@@ -197,14 +214,7 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 
 
 	public void send(){
-		int i=0;
-		int n=0;
 
-		/*if(_socket==null){
-			Log.d(TAG,"Socket is null");
-			//Data applicationConstant = ((Data)getApplicationContext());
-			_socket=getData.getSocket();
-		}*/
 
 		String broadCastCount="0";
 		toID=toUser.getText().toString();
@@ -246,146 +256,9 @@ public class BTClient extends AppCompatActivity implements OnClickListener{
 			edit0.setText("");
 		}
 
-		//sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,route,"Hello!");
-
-		/*try{
-			String getCache=cacheUtils.readJson(BTClient.this,"dialogue.txt").toString();
-			Log.d(TAG,"!!!!!: "+getCache);
-		}catch (Exception e){
-			e.getStackTrace();
-		}*/
 
 	}
 
-	/*public void test(){
-
-		String broadCastCount="0";
-		toID="18833333333";
-		//message="1";
-		String name=getData.getName();
-		String fromID=getData.getFromID();
-		Log.d(TAG,"Get data: "+name+"/"+fromID);
-		SendMessage sendMessage=new SendMessage(getApplicationContext());
-		String route;
-
-		int i;
-		int j=1;
-		String m;
-		long t1,t2;
-		int num=10;
-		t1 = System.currentTimeMillis();
-		for(i=0;i<num;i++){
-			m=Integer.toString(j);
-
-			//Check the stored routing table.
-			if(!getData.getRoute().equals("0000")){
-				String[] s=getData.getRoute().split("/");
-				String storeDest=s[s.length-1];
-				if(storeDest.equals(toID)){
-					route=getData.getRoute();
-					Log.d(TAG,"Get stored route: "+route);
-					sendMessage.sendFormatMessage(DIALOGUE,broadCastCount,name,fromID,toID,route,m);
-				}else {
-					route=getData.getFromID()+"/";
-					sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,m);
-					edit0.setText("");
-				}
-			}
-			else {
-				route=getData.getFromID()+"/";
-				sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,m);
-				edit0.setText("");
-			}
-			j++;
-			while(true){
-
-
-				t2 = System.currentTimeMillis();
-				if(getData.getAckFlag()==-1){//1ms
-					getData.setAckFlag(0);
-					Log.d(TAG,"Test time out.");
-
-					break;
-				}else if(getData.getAckFlag()==1){
-					getData.setAckFlag(0);
-					Log.d(TAG,"Test get ACK");
-
-					break;
-				}
-
-
-			}
-
-		}
-		t2 = System.currentTimeMillis();
-		long time=t2-t1;
-		Log.d(TAG,"The total time of sending "+num+" messages and receiving ACK is: "+time);
-
-	}*/
-
-
-/*
-//正常send
-
-
-	public void onSendButtonClicked(View v){
-		int i=0;
-		int n=0;
-
-		*/
-/*if(_socket==null){
-			Log.d(TAG,"Socket is null");
-			//Data applicationConstant = ((Data)getApplicationContext());
-			_socket=getData.getSocket();
-		}*//*
-
-
-		String broadCastCount="0";
-		toID=toUser.getText().toString();
-		message=edit0.getText().toString();
-		String route;
-
-		String name=getData.getName();
-		String fromID=getData.getFromID();
-		Log.d(TAG,"Get data: "+name+"/"+fromID);
-
-		SendMessage sendMessage=new SendMessage(getApplicationContext());
-
-		//Check the stored routing table.
-		if(!getData.getRoute().equals("0000")){
-			String[] s=getData.getRoute().split("/");
-			String storeDest=s[s.length-1];
-			if(storeDest.equals(toID)){
-				route=getData.getRoute();
-				Log.d(TAG,"Get stored route: "+route);
-				sendMessage.sendFormatMessage(DIALOGUE,broadCastCount,name,fromID,toID,route,message);
-			}else {
-				route=getData.getFromID()+"/";
-				sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,message);
-			}
-		}
-		else {
-			route=getData.getFromID()+"/";
-			sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,name,fromID,toID,route,message);
-		}
-
-		//sendMessage.sendFormatMessage(ROUTE_DISCOVERY,broadCastCount,toID,route,"Hello!");
-
-
-		//$+groupnum+name+#+latitude+&+longitude+*
-
-		try{
-			CacheUtils cache=new CacheUtils();
-			String getCache=cache.readJson(BTClient.this,"send.txt").toString();
-			Log.d(TAG,"!!!!!: "+getCache);
-		}catch (Exception e){
-			e.getStackTrace();
-		}
-
-
-
-	}
-*/
 
 
 

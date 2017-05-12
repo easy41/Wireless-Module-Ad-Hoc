@@ -1,11 +1,16 @@
 package com.example.apple.wireless_module_ad_hoc;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ByteArrayInputStream;
 
 /**
  * Created by Easy_MAI on 2017/4/17.
@@ -30,6 +35,7 @@ public class ReceiveMessage {
     private final static String RESCUE_INFORMATION ="3";
     private final static String ROAD_CONDITION ="4";
     private final static String Acknowledgement="5";
+    private final static String IMAGE="6";
 
     String TAG="ReceiveMessage";
 
@@ -338,14 +344,36 @@ public class ReceiveMessage {
                 }
                 break;
 
+            case IMAGE:
+                Log.d(TAG,"image string: "+message);
+                //Bitmap bm = string2Bitmap(message.substring(0, message.length() - 5));
+                Bitmap bm = string2Bitmap(message);
+                getData.setImage(bm);
+                getData.setMessageType(1);
+                break;
             default:
                 Log.d(TAG,"The message type is invalid. Ignore.");
                 break;
 
         }
+    }
 
 
-
+    public static Bitmap string2Bitmap(String st)
+    {
+        // OutputStream out;
+        Bitmap bitmap = null;
+        try
+        {
+            byte[] bitmapArray= Base64.decode(st, Base64.DEFAULT);
+            ByteArrayInputStream baos = new ByteArrayInputStream(bitmapArray);// inputstream
+            bitmap = BitmapFactory.decodeStream(baos);
+            return bitmap;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 
 
