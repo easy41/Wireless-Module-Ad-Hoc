@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name="com.example.apple.wireless_module_ad_hoc.Data">
+        android:name="com.example.apple.wireless_module_ad_hoc.DataProcess.Data">
 
         <!--在application中添加开发密钥-->
 
@@ -16,14 +16,14 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="A8H4qhVg7tDFcRu8aoDIWubv" />
 
-        <service android:name="com.example.apple.wireless_module_ad_hoc.BTService" />
+        <service android:name="com.example.apple.wireless_module_ad_hoc.Bluetooth.BTService" />
 
 
         <activity
 
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="sensor"
-            android:name="com.example.apple.wireless_module_ad_hoc.MainActivity" >
+            android:name="com.example.apple.wireless_module_ad_hoc.Actiivties.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -31,33 +31,33 @@
         </activity>
 
         <activity
-            android:name="com.example.apple.wireless_module_ad_hoc.Maptest"
+            android:name="com.example.apple.wireless_module_ad_hoc.Actiivties.Maptest"
             android:label="@string/app_name" >
         </activity>
 
 
         <activity
-            android:name="com.example.apple.wireless_module_ad_hoc.LoginActivity"
+            android:name="com.example.apple.wireless_module_ad_hoc.Actiivties.LoginActivity"
             android:label="@string/app_name" >
         </activity>
 
-        <activity android:name="com.example.apple.wireless_module_ad_hoc.Image"
+        <activity android:name="com.example.apple.wireless_module_ad_hoc.Actiivties.Image"
             android:label="@string/app_name">
 
         </activity>
 
 
         <!--New BT-->
-        <activity android:name="com.example.apple.wireless_module_ad_hoc.BTClient"
+        <activity android:name="com.example.apple.wireless_module_ad_hoc.Actiivties.BTClient"
             android:label="@string/app_name">
         </activity>
 
-        <activity android:name="com.example.apple.wireless_module_ad_hoc.RescueInfoActivity"
+        <activity android:name="com.example.apple.wireless_module_ad_hoc.Actiivties.RescueInfoActivity"
             android:label="@string/app_name">
         </activity>
 
 
-        <activity android:name="com.example.apple.wireless_module_ad_hoc.DeviceListActivity"
+        <activity android:name="com.example.apple.wireless_module_ad_hoc.Bluetooth.DeviceListActivity"
             android:label="选取连接设备"
             android:theme="@android:style/Theme.Dialog"
             android:configChanges="orientation|keyboardHidden" >

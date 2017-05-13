@@ -1,4 +1,4 @@
-package com.example.apple.wireless_module_ad_hoc;
+package com.example.apple.wireless_module_ad_hoc.Actiivties;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -9,10 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.content.Intent;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.example.apple.wireless_module_ad_hoc.Bluetooth.BTService;
+import com.example.apple.wireless_module_ad_hoc.Bluetooth.DeviceListActivity;
+import com.example.apple.wireless_module_ad_hoc.DataProcess.Data;
+import com.example.apple.wireless_module_ad_hoc.R;
 
 import java.io.IOException;
 import java.io.InputStream;

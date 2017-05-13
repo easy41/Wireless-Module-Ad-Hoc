@@ -1,4 +1,4 @@
-package com.example.apple.wireless_module_ad_hoc;
+package com.example.apple.wireless_module_ad_hoc.DataProcess;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.example.apple.wireless_module_ad_hoc.R;
 
 import java.util.ArrayList;
 

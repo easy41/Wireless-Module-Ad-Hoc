@@ -1,4 +1,4 @@
-package com.example.apple.wireless_module_ad_hoc;
+package com.example.apple.wireless_module_ad_hoc.Actiivties;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -20,6 +20,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
+
+import com.example.apple.wireless_module_ad_hoc.DataProcess.CacheUtils;
+import com.example.apple.wireless_module_ad_hoc.DataProcess.Data;
+import com.example.apple.wireless_module_ad_hoc.DataProcess.ListAdapter;
+import com.example.apple.wireless_module_ad_hoc.DataProcess.SendMessage;
+import com.example.apple.wireless_module_ad_hoc.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

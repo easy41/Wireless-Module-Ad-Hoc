@@ -1,4 +1,4 @@
-package com.example.apple.wireless_module_ad_hoc;
+package com.example.apple.wireless_module_ad_hoc.Actiivties;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.apple.wireless_module_ad_hoc.DataProcess.CacheUtils;
+import com.example.apple.wireless_module_ad_hoc.DataProcess.Data;
+import com.example.apple.wireless_module_ad_hoc.DataProcess.ListAdapter;
+import com.example.apple.wireless_module_ad_hoc.DataProcess.SendMessage;
+import com.example.apple.wireless_module_ad_hoc.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

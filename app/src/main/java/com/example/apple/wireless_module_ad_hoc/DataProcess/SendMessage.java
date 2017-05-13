@@ -1,9 +1,8 @@
-package com.example.apple.wireless_module_ad_hoc;
+package com.example.apple.wireless_module_ad_hoc.DataProcess;
 
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;

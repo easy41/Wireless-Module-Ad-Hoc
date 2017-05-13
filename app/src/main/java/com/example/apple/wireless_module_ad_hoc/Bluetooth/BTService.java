@@ -1,4 +1,4 @@
-package com.example.apple.wireless_module_ad_hoc;
+package com.example.apple.wireless_module_ad_hoc.Bluetooth;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -18,6 +18,9 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.apple.wireless_module_ad_hoc.DataProcess.Data;
+import com.example.apple.wireless_module_ad_hoc.DataProcess.ReceiveMessage;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

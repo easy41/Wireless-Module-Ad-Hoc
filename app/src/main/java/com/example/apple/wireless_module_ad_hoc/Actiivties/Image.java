@@ -1,4 +1,4 @@
-package com.example.apple.wireless_module_ad_hoc;
+package com.example.apple.wireless_module_ad_hoc.Actiivties;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -13,7 +13,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.ImageView;
+
+import com.example.apple.wireless_module_ad_hoc.DataProcess.Data;
+import com.example.apple.wireless_module_ad_hoc.DataProcess.SendMessage;
+import com.example.apple.wireless_module_ad_hoc.R;
 
 
 public class Image extends Activity{

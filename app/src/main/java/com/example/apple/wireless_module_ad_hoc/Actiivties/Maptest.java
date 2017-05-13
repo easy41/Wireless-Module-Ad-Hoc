@@ -1,4 +1,4 @@
-package com.example.apple.wireless_module_ad_hoc;
+package com.example.apple.wireless_module_ad_hoc.Actiivties;
 
 import android.location.LocationListener;
 import android.location.LocationProvider;
@@ -37,6 +37,10 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.TextOptions;
+import com.example.apple.wireless_module_ad_hoc.DataProcess.CacheUtils;
+import com.example.apple.wireless_module_ad_hoc.DataProcess.Data;
+import com.example.apple.wireless_module_ad_hoc.DataProcess.SendMessage;
+import com.example.apple.wireless_module_ad_hoc.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
