@@ -32,6 +32,12 @@ public class BTService extends Service {
     private String TAG="BTService";
     private final static int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_INVOKE_IMAGE = 3;
+    private final static String ROUTE_DISCOVERY ="1";
+    private final static String DIALOGUE ="2";
+    private final static String RESCUE_INFORMATION ="3";
+    private final static String ROAD_CONDITION ="4";
+    private final static String Acknowledgement="5";
+    private final static String IMAGE="6";
 
     private final static String MY_UUID = "00001101-0000-1000-8000-00805F9B34FB";
 
@@ -170,6 +176,28 @@ public class BTService extends Service {
                     Log.d(TAG,"Handler receive: "+smsg);
                     ReceiveMessage receiveMessage=new ReceiveMessage(getApplicationContext());
                     receiveMessage.receiveMessageHandler(smsg);
+
+                    String[] info=smsg.split("\\|");
+                    switch (info[0]){
+                        case ROUTE_DISCOVERY:
+                            Toast.makeText(BTService.this,"New chatting message!",Toast.LENGTH_SHORT).show();
+                            break;
+                        case DIALOGUE:
+                            Toast.makeText(BTService.this,"New chatting message!",Toast.LENGTH_SHORT).show();
+                            break;
+                        case RESCUE_INFORMATION:
+                            Toast.makeText(BTService.this,"New rescue message!",Toast.LENGTH_SHORT).show();
+                            break;
+                        case ROAD_CONDITION:
+                            Toast.makeText(BTService.this,"New road condition message!",Toast.LENGTH_SHORT).show();
+                            break;
+                        case IMAGE:
+                            Toast.makeText(BTService.this,"New image message!",Toast.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            break;
+                    }
+
                     smsg="";
 
                 }

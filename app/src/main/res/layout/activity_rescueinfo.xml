@@ -16,6 +16,12 @@
 		android:layout_height="wrap_content"
 		android:text="RESCUE INFORMATION" />
 
+	<TextView
+		android:id="@+id/textView2"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Click refresh to get new message" />
+
 	<ListView
 		android:id="@+id/rescue_list"
 		android:layout_width="match_parent"
