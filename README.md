@@ -1,13 +1,14 @@
 # Wireless-Module-Ad-Hoc
-This is an Android project used for mobile communication without network 
+Peripheral Designed for Mobile Phones to Support Ad Hoc Network
 
 
 # Introduction
-This is a project combined hardware and software. Using the app as well as two bluetooth modules and
-two wireless data transmission module, two mobile can communicate with each other without network. 
+There is a great need on a wide range of mobile Ad Hoc network when emergency occurs, such as earthquake and tsunami. This project aims to design and implement a peripheral for mobile phones to support the multimedia communication without the support of telecommunication infrastructure. 
 
 
 # System Architecture
+![avatar](/Users/apple/Desktop/Desktop/Sync/github)
+![avatar](https://flic.kr/p/23mjVP8）
 1. Wireless Data Transmission Module (WDTM)
 Wireless data transmission modules are connected to the mobiles through bluetooth. WDTM are served 
 to transmit and receive the data
@@ -21,6 +22,7 @@ location information with group members.
 
 
 # Software Design
+![avatar](/Users/apple/Desktop/Desktop/Sync/github/Software architecture.png)
 1. Activities
 Activities include login, logout, send text, image and etc...
 
@@ -36,6 +38,4 @@ Encode text, image at the transmitting end and decode them at the receiving end.
 
 # Usage
 Clone the code, import to the Android Studio and build the gradle.
-
-
 
