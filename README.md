@@ -7,7 +7,7 @@ There is a great need on a wide range of mobile Ad Hoc network when emergency oc
 
 
 # System Architecture
-![Hardware architecture](/Users/apple/Desktop/Desktop/Sync/github/Software architecture.png)
+![Hardwar architecture](https://github.com/easy41/Images/blob/master/Hardware%20architecture.png)
 
 1. Wireless Data Transmission Module (WDTM)
 Wireless data transmission modules are connected to the mobiles through bluetooth. WDTM are served 
@@ -22,7 +22,7 @@ location information with group members.
 
 
 # Software Design
-
+![Software architecture](https://github.com/easy41/Images/blob/master/Software%20architecture.png)
 
 1. Activities
 Activities include login, logout, send text, image and etc...
