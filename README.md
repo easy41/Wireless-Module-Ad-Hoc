@@ -38,3 +38,5 @@ The peripheral can also serve as a relay by broadcasting the message received to
 # Usage
 Clone the code, import to the Android Studio and build the gradle.
 
+
+Baidu Map API: http://lbsyun.baidu.com
