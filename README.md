@@ -7,34 +7,32 @@ There is a great need on a wide range of mobile Ad Hoc network when emergency oc
 
 
 # System Architecture
-![Hardwar architecture](https://github.com/easy41/Images/blob/master/Hardware%20architecture.png)
+![Hardware architecture](https://github.com/easy41/Images/blob/master/Hardware%20architecture.png)
 
 1. Wireless Data Transmission Module (WDTM)
-Wireless data transmission modules are connected to the mobiles through bluetooth. WDTM are served 
-to transmit and receive the data
+Taking power consumption and price into consideration, this project adopted FT-52 as the wireless data transmission module. FT-52 is half-duplex and low power consumption. Its maximum transmit power is 200mW and the transmit distance is around 1 km in open areas. 
+
 
 2. Bluetooth Module
-Bluetooth modules are used to connect the WDTM
+The Bluetooth module is closely connected to FT-52 based on serial communication. It enables the wireless communication between FT-52 and mobile devices such as smart phones.
 
-3. Android Application
-The Android Application has the function of login, transmit of text, image, get current location, share
-location information with group members.
+3. Mobile device
+The mobile device was equipped with an Android application to implement the originally designed Ad Hoc protocol (low power consumption AODV) and multi-media communication functions.
 
 
 # Software Design
 ![Software architecture](https://github.com/easy41/Images/blob/master/Software%20architecture.png)
 
-1. Activities
+The software part was implemented as an Android application. To distinguish received data, the system assigns tags to the data blocks. The algorithm is able to pack and unpack the transmitting data with tags according to their types.
+
+1. Text and image transmission
 Activities include login, logout, send text, image and etc...
 
-2. Bluetooth
-Call bluetooth thread to achieve the function of search, connect to the bluetooth
+2. Location sharing
+Adopting the Baidu Map API, it is able to show the location information intuitively.
 
-3. Map Api
-Call Baidu Map Api to get the real-time locaiton
-
-4. Data Processing
-Encode text, image at the transmitting end and decode them at the receiving end.
+3. Relay
+The peripheral can also serve as a relay by broadcasting the message received to the peripherals around automatically.
 
 
 # Usage
